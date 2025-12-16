@@ -1,32 +1,56 @@
+# Node modules
 /node_modules
+
+# Vendor folder
+/vendor
+
+# Laravel specific
 /public/hot
 /public/storage
 /public/.htaccess
 /storage/*.key
-/vendor
 .env
 .env.backup
 .phpunit.result.cache
+
+# Homestead
 Homestead.json
 Homestead.yaml
-npm-debug.log
-yarn-error.log
+
+# IDE / editor files
 /.idea
 /.vscode
-hint.txt
+
+# Logs and debug
+npm-debug.log
+yarn-error.log
 *.lock
+
+# PHP CS Fixer
 .php-cs-fixer.php
 .php-cs-fixer.dist.php
 .php-cs-fixer.cache
+
+# IDE helper
 _ide_helper.php
+.phpstorm.meta.php
+
+# Composer & package files
 composer.lock
 package-lock.json
-.phpstorm.meta.php
+
+# StyleCI
 .styleci.yml
+
+# Random files
 .rnd
 *.zip
-!/storage/app/public/language
-!/storage/app/public/default
+
+# Storage exceptions (keep these folders in Git)
+/storage/app/public/language
+/storage/app/public/default
+
+# Other project docs
 ApiDesignPattern.md
 APIStandards.md
 todo.md
