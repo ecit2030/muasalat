@@ -1,0 +1,41 @@
+<?php
+
+namespace {{ namespace }};
+use App\Http\Controllers\Api\ApiController;
+use App\Support\Api\Crud\WithIndex;
+use App\Support\Api\Crud\WithDestroy;
+use App\Support\Api\Crud\WithForm;
+use App\Support\Api\Crud\WithStore;
+use App\Support\Api\Crud\WithUpdate;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\{{ model }};
+use App\Http\Resources\Api\{{ core }}\{{ resource }};
+use App\Http\Requests\Api\{{ core }}\{{ formRequest }};
+
+class {{ class }} extends ApiController
+{
+    use WithIndex, WithForm, WithStore, WithUpdate, WithDestroy;
+
+    protected string $routeName = '{{ routeName }}';
+
+   protected string $resource = {{ resource }}::class;
+
+   protected string $formRequest = {{ formRequest }}::class;
+
+    protected string $model = {{ model }}::class;
+
+
+    protected function rules()
+    {
+        return [
+
+        ];
+    }
+
+    protected function formData(?Model $model = null): array
+    {
+        return [
+
+        ];
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "java.debugger.reloadClassesAfterCompilation": "Ask",
+    "run.destination.stop.already.running": "Ask",
+    "editor.formatOnSave": true,
+    "nodejs.typescript.rebuildOnChanges": true
+}

@@ -1,0 +1,5 @@
+<x-pages.datatable
+    :title="t_('{{ name }}')"
+    route="{{ route }}"
+    :datatable="$dataTable"
+/>

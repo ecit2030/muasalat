@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use Closure;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Support\Contracts\Filters\FilterContract;
+
+class {{ class }} implements FilterContract
+{
+    public function handle(Builder $query, Closure $next)
+    {
+        if (! request()->has('example')) {
+            return $next($query);
+        }
+
+        return $next($query)->where('example', request()->input('example'));
+    }
+}

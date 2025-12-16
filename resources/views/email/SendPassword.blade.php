@@ -1,0 +1,9 @@
+@component('mail::message')
+    {{$message}}
+    <br>
+    {{$email}}
+    <br>
+    {{$mobile}}
+    <br>
+    {{$password}}
+@endcomponent

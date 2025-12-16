@@ -1,0 +1,41 @@
+<?php
+
+namespace {{ namespace }};
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Support\Crud\WithDatatable;
+use App\Support\Crud\WithDestroy;
+use App\Support\Crud\WithForm;
+use App\Support\Crud\WithStore;
+use App\Support\Crud\WithUpdate;
+use Illuminate\Database\Eloquent\Model;
+use App\Datatables\Dashboard\{{ core }}\{{ datatable }};
+use App\Models\{{ model }};
+use App\Http\Requests\Dashboard\{{ core }}\{{ formRequest }};
+
+class {{ class }} extends DashboardController
+{
+    use WithDatatable, WithForm, WithStore, WithUpdate, WithDestroy;
+
+    protected string $routeName = '{{ path }}';
+
+    protected string $datatable = {{ datatable }}::class;
+   protected string $formRequest = {{ formRequest }}::class;
+
+    protected string $model = {{ model }}::class;
+    protected string $permissions = '{{ model }}';
+
+
+    protected function rules()
+    {
+        return [
+
+        ];
+    }
+
+    protected function formData(?Model $model = null): array
+    {
+        return [
+
+        ];
+    }
+}

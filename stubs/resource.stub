@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Support\Api\Resource\WithPagination;
+
+class {{ class }} extends JsonResource
+{
+    use WithPagination;
+
+    public function toArray($request): array
+    {
+        return [
+            'id'=>$this->id
+        ];
+    }
+}

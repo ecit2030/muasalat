@@ -1,0 +1,5444 @@
+{
+	"info": {
+		"_postman_id": "0de50274-a502-4d72-ab5d-bd4023973139",
+		"name": "Mausalat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16437898",
+		"_collection_link": "https://warped-escape-658565.postman.co/workspace/My-Workspace~4634fb07-6e1b-47b9-89e2-ec40c10c3c7d/collection/16437898-0de50274-a502-4d72-ab5d-bd4023973139?action=share&source=collection_link&creator=16437898"
+	},
+	"item": [
+		{
+			"name": "Captain",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "register",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/register",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"var token = jsonData[\"data\"][\"token\"];\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "ehab",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test31@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Test@123",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "Test@123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "captain",
+											"description": "user Or captain",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0515151515",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/register",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verifyCode",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0515151515",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verifyCode Copy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0515151515",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify cahnge phone Code",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512345678",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyChangePhoneCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyChangePhoneCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Complete Personal",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "date_of_birth",
+											"value": " 1997-04-23 ",
+											"type": "text"
+										},
+										{
+											"key": "ussid_number",
+											"value": " 29704231200337121",
+											"type": "text"
+										},
+										{
+											"key": "ussid",
+											"type": "file",
+											"src": "/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+										},
+										{
+											"key": "driver_license",
+											"type": "file",
+											"src": "/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+										},
+										{
+											"key": "bank_name",
+											"value": " al ahly ",
+											"type": "text"
+										},
+										{
+											"key": "bank_personal_id",
+											"value": "1231231121",
+											"type": "text"
+										},
+										{
+											"key": "iban",
+											"value": "545615621",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/complete-personal",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"complete-personal"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compete Vehicle Info",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "license_end_date",
+											"value": "2030-05-23",
+											"type": "text"
+										},
+										{
+											"key": "periodic_end_date",
+											"value": "2030-05-23",
+											"type": "text"
+										},
+										{
+											"key": "ensurance_end_date",
+											"value": "2030-05-23",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_year_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_number",
+											"value": "114",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_letter",
+											"value": "asq",
+											"type": "text"
+										},
+										{
+											"key": "color",
+											"value": "red",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_form",
+											"type": "file",
+											"src": "/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+										},
+										{
+											"key": "vehicle_license",
+											"type": "file",
+											"src": "/D:/photo/82156520_1216836631823463_7108809042595676160_n.jpg"
+										},
+										{
+											"key": "vehicle_ensurance",
+											"type": "file",
+											"src": "/D:/photo/9.jpg"
+										},
+										{
+											"key": "vehicle_periodic",
+											"type": "file",
+											"src": "/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+										},
+										{
+											"key": "vehicle[]",
+											"type": "file",
+											"src": [
+												"/D:/photo/9.jpg",
+												"/D:/photo/2012-09-18 21.22.41.jpg",
+												"/D:/photo/2012-09-25 21.08.06.jpg",
+												"/D:/photo/62799_127162297336521_100001282544721_166681_4450125_n.jpg"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/complete-vehicle",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"complete-vehicle"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"var token = jsonData[\"data\"][\"token\"];\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0533221111",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "device_token",
+											"value": "aksjdnakjsdnajksdn",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "captain",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/login",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "forget password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "01066135740",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/forgetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"forgetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "01066135740",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "@Test123456789",
+											"type": "default"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "@Test123456789",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/resetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"resetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "new_password",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "new_password_confirmation",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "old_password",
+											"value": "@Test123456789",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/changePassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sign out",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Base_url}}/auth/signout",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove Acc",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/delete-acc",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"delete-acc"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "My Profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/profile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "My notification",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/notifications",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"notifications"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Profile",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "blue",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/D:/photo/82156520_1216836631823463_7108809042595676160_n.jpg"
+										},
+										{
+											"key": "vehicle_year_id",
+											"value": "16",
+											"type": "text"
+										},
+										{
+											"key": "ussid_number",
+											"value": "34",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/edit-profile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"edit-profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Phone",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/change-phone",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"change-phone"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Setting",
+					"item": [
+						{
+							"name": "Terms",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/terms",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"terms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Privacy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/privacy",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"privacy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "about",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/about",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"about"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Contact Us",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "ehab",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "ehab@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "hahaha",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/contact_us",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"contact_us"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAQ",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/faq",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"faq"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Chat",
+					"item": [
+						{
+							"name": "Send Message",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "receiver_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "hahaha",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/chat/send",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"chat",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get single Chat",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "chat_id",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/chat/single",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"chat",
+										"single"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get chat page",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/chat/page",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"chat",
+										"page"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Track",
+					"item": [
+						{
+							"name": "All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/tracks",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"tracks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Single",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/tracks/2",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"tracks",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"ggg\",\r\n    \"origin\": {\r\n        \"location\": \"Osama abn zied street\",\r\n        \"lat\": \"31.031691\",\r\n        \"lng\": \"31.3624186\",\r\n        \"start_time\": \"10:50\",\r\n        \"duration\": \"0\",\r\n        \"distance\": \"0\"\r\n    },\r\n    \"destination\": {\r\n        \"location\": \"393J+H67، صلاح سالم، مدينة طلخا، مركز طلخا، الدقهلية 7625420، مصر\",\r\n        \"duration\": \"16:02\",\r\n        \"distance\": \"8.03\",\r\n        \"lat\": \"31.054051296360207\",\r\n        \"lng\": \"31.38041451573372\"\r\n    },\r\n    \"waypoints\": [\r\n        {\r\n            \"location\": \"stop1\",\r\n            \"duration\": \"6:72\",\r\n            \"distance\": \"1.67\",\r\n            \"lat\": \"31.036918524180784\",\r\n            \"lng\": \"31.365475282073024\"\r\n        },\r\n        {\r\n            \"location\": \"stop2\",\r\n            \"duration\": \"12:50\",\r\n            \"distance\": \"3.39\",\r\n            \"lat\": \"31.04741761062873\",\r\n            \"lng\": \"31.368925608694553\"\r\n        },\r\n        {\r\n            \"location\": \"stop3\",\r\n            \"duration\": \"16:88\",\r\n            \"distance\": \"5.41\",\r\n            \"lat\": \"31.047575595096593\",\r\n            \"lng\": \"31.376246698200706\"\r\n        }\r\n    ],\r\n    \"repeat\": [\r\n        \"Saturday\",\r\n        \"Sunday\",\r\n        \"Monday\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/tracks",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"tracks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/tracks/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"tracks",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/tracks/3",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"tracks",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Package",
+					"item": [
+						{
+							"name": "All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/packages",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"packages"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "previous",
+											"description": "current // previous -- default is current",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Single",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/packages/2",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"packages",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"golden pack\",\n\"type_of_estimation\":\"trip\",\n\"quota\":\"1\",\n\"track_id\":[\"2\"],\n\"valid_till\":30,\n\"price\":50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/packages",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"packages"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "golden",
+											"type": "text"
+										},
+										{
+											"key": "type_of_estimation",
+											"value": "trip",
+											"type": "text"
+										},
+										{
+											"key": "quota",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "track_id[0]",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "track_id[1]",
+											"value": "3",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "track_id[2]",
+											"value": "2",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "price",
+											"value": "50",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/packages/3",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"packages",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/packages/2",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"packages",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Trip",
+					"item": [
+						{
+							"name": "All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "current",
+											"description": "new, current",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "All",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "Accept-Language",
+												"value": "ar",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{BASEURL}}/captain/trips?filter=upcoming",
+											"host": [
+												"{{BASEURL}}"
+											],
+											"path": [
+												"captain",
+												"trips"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "upcoming",
+													"description": "upcoming // current // previous -- default is current"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Host",
+											"value": "127.0.0.1:8000"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 25 May 2023 10:10:52 GMT"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 25 May 2023 10:10:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.1.12"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "58"
+										},
+										{
+											"key": "phpdebugbar-id",
+											"value": "X8e9f6c336e4b157dab1b0b91d2519d6e"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"Booting\";dur=391.071081"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"Application\";dur=283.495903"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from information_schema.tables where table_schema = 'mowaslat' and table_name = 'migrations...\";dur=0.699997"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `personal_access_tokens` where `personal_access_tokens`.`id` = '3' limit 1\";dur=1.120090"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=6.000042"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `users` where `users`.`id` = 10 limit 1\";dur=1.120090"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `media` where `media`.`model_id` in (10) and `media`.`model_type` = 'App\\Models\\User'\";dur=1.529932"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"update `personal_access_tokens` set `last_used_at` = '2023-05-25 13:10:51', `personal_access_tokens`...\";dur=6.390095"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `user_infos` where `user_infos`.`user_id` = 10 and `user_infos`.`user_id` is not null...\";dur=0.590086"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=3.969908"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `languages` where `code` = 'ar' and `active` = 1 limit 1\";dur=0.519991"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `roles`.*, `model_has_roles`.`model_id` as `pivot_model_id`, `model_has_roles`.`role_id` as `...\";dur=1.689911"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `trips`.`id`, `track_id`, `date`, `rate`, `start_at`, `end_at`, `tracks`.`owner_id` as `larav...\";dur=1.379967"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `client_id` from `trips` where (`track_id` = 2 and `date` = '2023-05-29' and `start_at` is nu...\";dur=0.930071"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `tracks` where `tracks`.`id` = 2 limit 1\";dur=0.849962"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `waypoints` where `waypoints`.`track_id` = 2 and `waypoints`.`track_id` is not null an...\";dur=1.970053"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=4.529953"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `users` where `users`.`id` = 9 limit 1\";dur=0.669956"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `media` where `media`.`model_id` in (9) and `media`.`model_type` = 'App\\Models\\User'\";dur=0.550032"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `client_packages` limit 1\";dur=0.999928"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `package` from `client_packages` where `client_packages`.`client_id` = 9 and `client_packages...\";dur=0.540018"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"code\": 200,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"track\": {\n                \"id\": 2,\n                \"name\": \"mansoura -- cairo\",\n                \"active\": \"true\",\n                \"origin\": {\n                    \"location\": \"mansoura\",\n                    \"lat\": \"31.0409\",\n                    \"lng\": \"31.3785\",\n                    \"start_time\": \"12:23\",\n                    \"duration\": \"0\",\n                    \"distance\": \"0\"\n                },\n                \"destination\": {\n                    \"location\": \"cairo\",\n                    \"lat\": \"30.0444\",\n                    \"lng\": \"31.2357\",\n                    \"distance\": \"30\",\n                    \"duration\": \"3:12\"\n                },\n                \"repeat\": [\n                    \"Monday\",\n                    \"Tuesday\"\n                ],\n                \"waypoints\": [\n                    {\n                        \"location\": \"tanta\",\n                        \"lat\": \"30.7865\",\n                        \"lng\": \"31.0004\",\n                        \"distance\": \"20\",\n                        \"duration\": \"1:12\"\n                    },\n                    {\n                        \"location\": \"zagazig\",\n                        \"lat\": \"30.5765\",\n                        \"lng\": \"31.5041\",\n                        \"distance\": \"20\",\n                        \"duration\": \"1:12\"\n                    }\n                ]\n            },\n            \"date\": \"2023-05-29\",\n            \"rate\": 0,\n            \"start_at\": null,\n            \"end_at\": null,\n            \"clients\": [\n                {\n                    \"id\": 9,\n                    \"name\": \"user\",\n                    \"phone\": \"01066135741\",\n                    \"packages\": [\n                        {\n                            \"id\": 1,\n                            \"name\": \"Ada Kreiger MD\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "show",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/185",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"185"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "settings",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips-settings",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips-settings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "accept trip",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/accept/185",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"accept",
+										"185"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "pay trip after accepted from captain",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/pay-trip/185",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"pay-trip",
+										"185"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reject trip",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{driverToekn}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/reject/185",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"reject",
+										"185"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "start trip",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"golden pack\",\n\"type_of_estimation\":\"trip\",\n\"quota\":\"1\",\n\"track_id\":[\"1\",\"2\"],\n\"valid_till\":30,\n\"price\":50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/start/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"start",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finish trip",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "golden",
+											"type": "text"
+										},
+										{
+											"key": "type_of_estimation",
+											"value": "trip",
+											"type": "text"
+										},
+										{
+											"key": "quota",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "track_id[0]",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "track_id[2]",
+											"value": "2",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "track_id[1]",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "50",
+											"type": "text"
+										},
+										{
+											"key": "valid_till",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/captain/trips/finish/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"captain",
+										"trips",
+										"finish",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "verifyCode",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "01066135744202",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify cahnge phone Code Copy",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512345678",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyChangePhoneCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyChangePhoneCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"var token = jsonData[\"data\"][\"token\"];\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "22|pLg6wGel9ov2oc81T6IIkfVy47ZKTclW3ss6XNDHcb943e10",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0533221111",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "device_token",
+											"value": "aksjdnakjsdnajksdn",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "captain",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/login",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "forget password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "010661357444",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/forgetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"forgetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "01066135740",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "@Test123456789",
+											"type": "default"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "@Test123456789",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/resetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"resetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "new_password",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "new_password_confirmation",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "old_password",
+											"value": "@Test123456789",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/changePassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sign out",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Base_url}}/auth/signout",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove Acc",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/delete-acc",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"delete-acc"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "My Profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/profile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Profile",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "color",
+											"value": "blue",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_form",
+											"type": "file",
+											"src": "/D:/photo/Family Photo/2012-08-09 14.41.10.jpg"
+										},
+										{
+											"key": "vehicle_year_id",
+											"value": "15",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/editProfile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"editProfile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Phone",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/changePhone",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"changePhone"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Setting",
+					"item": [
+						{
+							"name": "Terms",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/terms",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"terms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Privacy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/privacy",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"privacy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "about",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/about",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"about"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Contact Us",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "ehab",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "ehab@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "hahaha",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/contact_us",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"contact_us"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAQ",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/faq",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"faq"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Trip",
+					"item": [
+						{
+							"name": "All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/driver/trips?filter=upcoming",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"driver",
+										"trips"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "upcoming",
+											"description": "upcoming // current // previous -- default is current"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "All",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "Accept-Language",
+												"value": "ar",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{BASEURL}}/captain/trips?filter=upcoming",
+											"host": [
+												"{{BASEURL}}"
+											],
+											"path": [
+												"captain",
+												"trips"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "upcoming",
+													"description": "upcoming // current // previous -- default is current"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Host",
+											"value": "127.0.0.1:8000"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 25 May 2023 10:10:52 GMT"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 25 May 2023 10:10:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.1.12"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "58"
+										},
+										{
+											"key": "phpdebugbar-id",
+											"value": "X8e9f6c336e4b157dab1b0b91d2519d6e"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"Booting\";dur=391.071081"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"Application\";dur=283.495903"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from information_schema.tables where table_schema = 'mowaslat' and table_name = 'migrations...\";dur=0.699997"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `personal_access_tokens` where `personal_access_tokens`.`id` = '3' limit 1\";dur=1.120090"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=6.000042"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `users` where `users`.`id` = 10 limit 1\";dur=1.120090"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `media` where `media`.`model_id` in (10) and `media`.`model_type` = 'App\\Models\\User'\";dur=1.529932"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"update `personal_access_tokens` set `last_used_at` = '2023-05-25 13:10:51', `personal_access_tokens`...\";dur=6.390095"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `user_infos` where `user_infos`.`user_id` = 10 and `user_infos`.`user_id` is not null...\";dur=0.590086"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=3.969908"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `languages` where `code` = 'ar' and `active` = 1 limit 1\";dur=0.519991"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `roles`.*, `model_has_roles`.`model_id` as `pivot_model_id`, `model_has_roles`.`role_id` as `...\";dur=1.689911"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `trips`.`id`, `track_id`, `date`, `rate`, `start_at`, `end_at`, `tracks`.`owner_id` as `larav...\";dur=1.379967"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `client_id` from `trips` where (`track_id` = 2 and `date` = '2023-05-29' and `start_at` is nu...\";dur=0.930071"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `tracks` where `tracks`.`id` = 2 limit 1\";dur=0.849962"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `waypoints` where `waypoints`.`track_id` = 2 and `waypoints`.`track_id` is not null an...\";dur=1.970053"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select column_name as `column_name` from information_schema.columns where table_schema = 'mowaslat'...\";dur=4.529953"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `users` where `users`.`id` = 9 limit 1\";dur=0.669956"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `media` where `media`.`model_id` in (9) and `media`.`model_type` = 'App\\Models\\User'\";dur=0.550032"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select * from `client_packages` limit 1\";dur=0.999928"
+										},
+										{
+											"key": "Server-Timing",
+											"value": "app;desc=\"select `package` from `client_packages` where `client_packages`.`client_id` = 9 and `client_packages...\";dur=0.540018"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": true,\n    \"code\": 200,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"track\": {\n                \"id\": 2,\n                \"name\": \"mansoura -- cairo\",\n                \"active\": \"true\",\n                \"origin\": {\n                    \"location\": \"mansoura\",\n                    \"lat\": \"31.0409\",\n                    \"lng\": \"31.3785\",\n                    \"start_time\": \"12:23\",\n                    \"duration\": \"0\",\n                    \"distance\": \"0\"\n                },\n                \"destination\": {\n                    \"location\": \"cairo\",\n                    \"lat\": \"30.0444\",\n                    \"lng\": \"31.2357\",\n                    \"distance\": \"30\",\n                    \"duration\": \"3:12\"\n                },\n                \"repeat\": [\n                    \"Monday\",\n                    \"Tuesday\"\n                ],\n                \"waypoints\": [\n                    {\n                        \"location\": \"tanta\",\n                        \"lat\": \"30.7865\",\n                        \"lng\": \"31.0004\",\n                        \"distance\": \"20\",\n                        \"duration\": \"1:12\"\n                    },\n                    {\n                        \"location\": \"zagazig\",\n                        \"lat\": \"30.5765\",\n                        \"lng\": \"31.5041\",\n                        \"distance\": \"20\",\n                        \"duration\": \"1:12\"\n                    }\n                ]\n            },\n            \"date\": \"2023-05-29\",\n            \"rate\": 0,\n            \"start_at\": null,\n            \"end_at\": null,\n            \"clients\": [\n                {\n                    \"id\": 9,\n                    \"name\": \"user\",\n                    \"phone\": \"01066135741\",\n                    \"packages\": [\n                        {\n                            \"id\": 1,\n                            \"name\": \"Ada Kreiger MD\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Single",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/driver/trips/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"driver",
+										"trips",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "start trip",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"golden pack\",\n\"type_of_estimation\":\"trip\",\n\"quota\":\"1\",\n\"track_id\":[\"1\",\"2\"],\n\"valid_till\":30,\n\"price\":50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/driver/trips/start/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"driver",
+										"trips",
+										"start",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finish trip",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "golden",
+											"type": "text"
+										},
+										{
+											"key": "type_of_estimation",
+											"value": "trip",
+											"type": "text"
+										},
+										{
+											"key": "quota",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "track_id[0]",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "track_id[2]",
+											"value": "2",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "track_id[1]",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "50",
+											"type": "text"
+										},
+										{
+											"key": "valid_till",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/driver/trips/finish/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"driver",
+										"trips",
+										"finish",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"var token = jsonData[\"data\"][\"token\"];\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "hima",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "hima@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"description": "user Or captain",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0512357878",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "himasami0000",
+											"type": "text"
+										},
+										{
+											"key": "full_name",
+											"value": "hima ahmed sami",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/register",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verifyCode",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512357878",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "hima@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "7116",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "email",
+											"description": "email, phone",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify cahnge phone Code Copy 2",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512345678",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/verifyChangePhoneCode",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"verifyChangePhoneCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"var token = jsonData[\"data\"][\"token\"];\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512357878",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "device_token",
+											"value": "aksjdnakjsdnajksdn",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "user",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/login",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "forget password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0512357878",
+											"type": "default"
+										},
+										{
+											"key": "email",
+											"value": "hima@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "email",
+											"description": "email, phone",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/forgetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"forgetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "0533333333",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "@Test123456789",
+											"type": "default"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "@Test123456789",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/resetPassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"resetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "new_password",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "new_password_confirmation",
+											"value": "Test@123",
+											"type": "default"
+										},
+										{
+											"key": "old_password",
+											"value": "@Test123456789",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/changePassword",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sign out",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Base_url}}/auth/signout",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"signout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove Acc",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/delete-acc",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"delete-acc"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "My Profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/profile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Profile",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "color",
+											"value": "blue",
+											"type": "text"
+										},
+										{
+											"key": "vehicle_form",
+											"type": "file",
+											"src": "/D:/photo/Family Photo/2012-08-09 14.41.10.jpg"
+										},
+										{
+											"key": "vehicle_year_id",
+											"value": "15",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/edit-profile",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"edit-profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Phone",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "phone",
+											"value": "05",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/auth/change-phone",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"auth",
+										"change-phone"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Setting",
+					"item": [
+						{
+							"name": "Terms",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/terms",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"terms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Privacy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/privacy",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"privacy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "about",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/static_pages/about",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"static_pages",
+										"about"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Contact Us",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "ehab",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "ehab@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "hahaha",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/contact_us",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"contact_us"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAQ",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/faq",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"faq"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Trip",
+					"item": [
+						{
+							"name": "all",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips?filter=upcoming",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "upcoming",
+											"description": "upcoming // current // previous -- default is current"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new trips",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/new-trips",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"new-trips"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "rate trip",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "rate",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips/1/rate",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips",
+										"1",
+										"rate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": {\r\n        \"location\": \"مصر, طلخا, شارع الكشك 48\",\r\n        \"lat\": \"31.056753180780753\",\r\n        \"lng\": \"31.37855608016253\"\r\n    },\r\n    \"destination\": {\r\n        \"location\": \"مصر, المنصورة, شارع خاتم المرسلين\",\r\n        \"lat\": \"31.034447053180358\",\r\n        \"lng\": \"31.381617486476895\"\r\n    },\r\n    \"date\": \"2024-7-15\",\r\n    \"time\": \"10:04\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips/search/185",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips",
+										"search",
+										"185"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "send offer to driver",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "1121|0sNmDuXhannANfTi7BFrz9AHB02epjqtvRSDeIKO",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": {\r\n        \"location\": \"مصر, طلخا, شارع الكشك 48\",\r\n        \"lat\": \"31.056753180780753\",\r\n        \"lng\": \"31.37855608016253\"\r\n    },\r\n    \"destination\": {\r\n        \"location\": \"مصر, المنصورة, شارع خاتم المرسلين\",\r\n        \"lat\": \"31.034447053180358\",\r\n        \"lng\": \"31.381617486476895\"\r\n    },\r\n    \"date\": \"2024-7-15\",\r\n    \"time\": \"10:04\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips/send-driver-offer/185/116",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips",
+										"send-driver-offer",
+										"185",
+										"116"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "store",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "1121|0sNmDuXhannANfTi7BFrz9AHB02epjqtvRSDeIKO",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": {\r\n        \"location\": \"مصر, طلخا, شارع الكشك 48\",\r\n        \"lat\": \"31.056753180780753\",\r\n        \"lng\": \"31.37855608016253\"\r\n    },\r\n    \"destination\": {\r\n        \"location\": \"مصر, المنصورة, شارع خاتم المرسلين\",\r\n        \"lat\": \"31.034447053180358\",\r\n        \"lng\": \"31.381617486476895\"\r\n    },\r\n    \"date\": \"2024-7-15\",\r\n    \"time\": \"10:04\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/trips",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"trips"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Package",
+					"item": [
+						{
+							"name": "all",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/packages?filter=notvalid",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"packages"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "notvalid",
+											"description": "valid // notvalid == default is valid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/packages/1",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"packages",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"package_id\" : 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/packages",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"packages"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "wallet",
+					"item": [
+						{
+							"name": "wallet balance",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Key",
+										"value": "{{apiKey}}"
+									},
+									{
+										"key": "Api-Version",
+										"value": "v1"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/wallet/wallet-balance",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"wallet",
+										"wallet-balance"
+									]
+								},
+								"description": "an API which Offers a mean to Re-Send OTP."
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "17|hc2Zeup4dVab7Oolmbyoy6QUMgoVLLd2dTHlo4dna2a223cb",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Api-Key",
+												"value": "{{apiKey}}"
+											},
+											{
+												"key": "Api-Version",
+												"value": "v1"
+											},
+											{
+												"key": "Accept-Language",
+												"value": "{{lang}}"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/client-api/v1/notifications/all",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"client-api",
+												"v1",
+												"notifications",
+												"all"
+											]
+										},
+										"description": "an API which Offers a mean to Re-Send OTP."
+									},
+									"code": 401,
+									"_postman_previewlanguage": "Text",
+									"header": [
+										{
+											"key": "cache-control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\"status\":401,\"message\":\"Unauthenticated.\",\"errors\":{\"message\":[\"Unauthenticated.\"]}}"
+								}
+							]
+						},
+						{
+							"name": "wallet history",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Key",
+										"value": "{{apiKey}}"
+									},
+									{
+										"key": "Api-Version",
+										"value": "v1"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ar"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/wallet/wallet-history",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"wallet",
+										"wallet-history"
+									]
+								},
+								"description": "an API which Offers a mean to Re-Send OTP."
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "17|hc2Zeup4dVab7Oolmbyoy6QUMgoVLLd2dTHlo4dna2a223cb",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Api-Key",
+												"value": "{{apiKey}}"
+											},
+											{
+												"key": "Api-Version",
+												"value": "v1"
+											},
+											{
+												"key": "Accept-Language",
+												"value": "{{lang}}"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/client-api/v1/notifications/all",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"client-api",
+												"v1",
+												"notifications",
+												"all"
+											]
+										},
+										"description": "an API which Offers a mean to Re-Send OTP."
+									},
+									"code": 401,
+									"_postman_previewlanguage": "Text",
+									"header": [
+										{
+											"key": "cache-control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\"status\":401,\"message\":\"Unauthenticated.\",\"errors\":{\"message\":[\"Unauthenticated.\"]}}"
+								}
+							]
+						},
+						{
+							"name": "charge wallet",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Key",
+										"value": "{{apiKey}}"
+									},
+									{
+										"key": "Api-Version",
+										"value": "v1"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "{{lang}}"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "balance",
+											"value": "100",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASEURL}}/client/wallet/charge-wallet",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"client",
+										"wallet",
+										"charge-wallet"
+									]
+								},
+								"description": "an API which Offers a mean to Re-Send OTP."
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "17|hc2Zeup4dVab7Oolmbyoy6QUMgoVLLd2dTHlo4dna2a223cb",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Api-Key",
+												"value": "{{apiKey}}"
+											},
+											{
+												"key": "Api-Version",
+												"value": "v1"
+											},
+											{
+												"key": "Accept-Language",
+												"value": "{{lang}}"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/client-api/v1/notifications/all",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"client-api",
+												"v1",
+												"notifications",
+												"all"
+											]
+										},
+										"description": "an API which Offers a mean to Re-Send OTP."
+									},
+									"code": 401,
+									"_postman_previewlanguage": "Text",
+									"header": [
+										{
+											"key": "cache-control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\"status\":401,\"message\":\"Unauthenticated.\",\"errors\":{\"message\":[\"Unauthenticated.\"]}}"
+								}
+							]
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Firebase Check",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "ar",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "هاللو",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "هاللو",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASEURL}}/auth/firebase",
+					"host": [
+						"{{BASEURL}}"
+					],
+					"path": [
+						"auth",
+						"firebase"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASEURL",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "token",
+			"value": "iUhLe9EiZijwUIVzYUqor8K9izR564ra8b1hvrGe",
+			"type": "string"
+		},
+		{
+			"key": "code",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "BASEURL",
+			"value": "http://muasalat.test/api",
+			"type": "string"
+		},
+		{
+			"key": "BASEURL",
+			"value": "https://muasalaat.moltaqadev.com/api",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "driverToekn",
+			"value": "V7VmwoeVkCkzrmf6bruspFotXneRiJS7JjlLhIPU",
+			"type": "string"
+		}
+	]
+}

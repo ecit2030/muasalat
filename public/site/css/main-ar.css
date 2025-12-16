@@ -1,0 +1,105 @@
+body{
+    direction: rtl;
+}
+.navbar li.nav-item {
+    padding-left: 20px;
+}
+.navbar li.nav-item:after{
+    right:-30% !important;
+}
+.header .header-info a svg{
+    margin-left:10px
+}
+.features .features-info .icon {
+    margin-left: 20px;
+}
+.screenshots .phone-frame{
+    left: -140px;
+}
+.our-features .features-info .icon {
+    margin-left: 20px;
+    text-align: center;
+
+}
+.download .download-btns a{
+    margin-left:15px;
+    display: block;
+    width: 200px;
+    margin-top: 15px;
+}
+.download .download-btns a svg{
+    margin-left:5px
+}
+.pricing .bttn-white {
+    margin-left:10px
+}
+.padding-right {
+    padding-left:10px; 
+}
+.foote_bottom_ul_amrc {
+	margin-left: auto;
+}
+.switch-button {
+    padding-left: 120px;
+}
+.switch-button:before {
+    left: 0;
+}
+.navbar{
+    right: 0;
+}
+
+.header-overlay {
+     right: 0;
+}
+.adding-section .adding-sec-img a{
+    right:40%
+}
+.download::before {
+    right: 0;
+}
+.pricing .price-box .price-footer .bttn-white:before {
+    right: 2px;
+}
+.pricing .bttn-white:before {
+right: 0;
+}
+.accordion .card-header {
+    border-right: 5px solid #5e88fc;
+}
+.accordion .card-header h2 span {
+	float: right;
+}
+.card-body{
+    border-right: 5px solid #5e88fc;
+}
+.fleft {
+    float:right;
+}
+.foote_bottom_ul_amrc {
+	margin-right: auto;
+}
+.social_footer_ul li {
+    padding-right:20px;
+    float:right;
+}
+@media(max-width:576px){
+    .videos .videos-img a {
+        right: 34%;
+    }
+}
+@media(max-width:380px){
+    .videos .videos-img a {
+        right: 29%;
+    }
+}
+.switch-button-checkbox {
+    right: 0;
+}
+.switch-button-checkbox + .switch-button-label:before {
+    right: 0;
+}
+.our-features .icon svg{
+    margin: auto;
+    display: block;
+}

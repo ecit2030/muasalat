@@ -1,0 +1,13 @@
+{
+    "name": "Code",
+    "alias": "code",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Code\\Providers\\CodeServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

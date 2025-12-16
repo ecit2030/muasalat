@@ -1,0 +1,6 @@
+*
+!public/
+!public/default/
+!public/language/
+!temp
+!.gitignore

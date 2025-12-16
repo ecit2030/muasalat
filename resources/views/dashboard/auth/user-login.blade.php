@@ -1,0 +1,48 @@
+<div class="d-flex flex-column flex-root" id="kt_app_root">
+  <!--begin::Page bg image-->
+  <style>body {
+      background-image: url('{{asset('dashboard/media/auth/bg10.jpeg')}}');
+    }
+
+    [data-theme="dark"] body {
+      background-image: url('{{asset('assets/media/auth/bg10-dark.jpeg')}}');
+    }</style>
+  <!--end::Page bg image-->
+  <!--begin::Authentication - Sign-in -->
+  <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+    <!--begin::Aside-->
+    <div class="d-flex flex-lg-row-fluid">
+      <!--begin::Content-->
+      <div class="d-flex flex-column flex-center pb-0 pb-lg-10 p-10 w-100">
+
+        <!--begin::Image-->
+        <img class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+             src="{{setting('media','login_page_background.url',asset('dashboard/media/auth/agency.png'))}}"
+             alt=""/>
+        <img class="theme-dark-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+             src="{{setting('media','login_page_background.url',asset('dashboard/media/auth/agency-dark.png'))}}"
+             alt=""/>
+        <!--end::Image-->
+        <!--begin::Title-->
+
+
+        <!--end::Content-->
+      </div>
+      <!--begin::Aside-->
+      <!--begin::Body-->
+      <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12">
+        <!--begin::Wrapper-->
+        <div class="bg-body d-flex flex-center rounded-4 w-md-600px p-10">
+          <!--begin::Content-->
+          <div class="w-md-400px">
+            @yield('content')
+          </div>
+          <!--end::Content-->
+        </div>
+        <!--end::Wrapper-->
+      </div>
+      <!--end::Body-->
+    </div>
+    <!--end::Authentication - Sign-in-->
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Foundation\Http\FormRequest;
+use App\Support\Traits\ValidationRequest;
+
+class {{ class }} extends FormRequest
+{
+  use ValidationRequest;
+
+    public function rules()
+    {
+        return [
+            //
+        ];
+    }
+}
