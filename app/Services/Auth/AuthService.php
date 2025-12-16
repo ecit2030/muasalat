@@ -43,7 +43,7 @@ class AuthService
         }
         throw new HttpResponseException(sendError(__('messages.you_dont_have_a_valid_code'), ["please send code first" => __('messages.you_dont_have_a_valid_code')]));
     }
-
+ 
     public function register($request)
     {
         $data = $request->all();

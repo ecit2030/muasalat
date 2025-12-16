@@ -79,7 +79,7 @@ class AuthController extends ApiController
         $user->notify(new FcmNotification($tokens, request("title"), request("message")));
         return $this->successResponse("notify sent ;) ", "");
     }
-
+ 
     public function register(RegisterRequest $request)
     {
         $title = t_("messages.validate_register");
