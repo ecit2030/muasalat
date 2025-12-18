@@ -13,9 +13,9 @@ return new class extends Migration {
             DELETE c1
             FROM chats c1
             INNER JOIN chats c2
-                ON c1.sender_id = c2.sender_id
+                ON c1.trip_id = c2.trip_id
+                AND c1.sender_id = c2.sender_id
                 AND c1.receiver_id = c2.receiver_id
-                AND c1.trip_id = c2.trip_id
                 AND c1.id > c2.id
         ");
 
@@ -23,12 +23,14 @@ return new class extends Migration {
             // 2️⃣ Temporarily disable foreign key checks
             Schema::disableForeignKeyConstraints();
 
-            // 3️⃣ Drop old unique index
-            if (Schema::hasColumn('chats', 'sender_id') && Schema::hasColumn('chats', 'receiver_id')) {
+            // 3️⃣ Drop old unique index if it exists
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexes = $sm->listTableIndexes('chats');
+            if (isset($indexes['chats_sender_id_receiver_id_unique'])) {
                 $table->dropUnique('chats_sender_id_receiver_id_unique');
             }
 
-            // 4️⃣ Add new unique index
+            // 4️⃣ Add new unique index (per trip)
             $table->unique(['trip_id', 'sender_id', 'receiver_id'], 'chats_trip_sender_receiver_unique');
 
             // 5️⃣ Re-enable foreign key checks
@@ -41,7 +43,10 @@ return new class extends Migration {
         Schema::table('chats', function (Blueprint $table) {
             Schema::disableForeignKeyConstraints();
 
+            // Drop new index
             $table->dropUnique('chats_trip_sender_receiver_unique');
+
+            // Re-add old index
             $table->unique(['sender_id', 'receiver_id'], 'chats_sender_id_receiver_id_unique');
 
             Schema::enableForeignKeyConstraints();
