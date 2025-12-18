@@ -47,6 +47,33 @@ class Payment
     {
         $payment_method = CardPaymentMethod::find($payment_method_id);
 
+            // ---------- TEST MODE ----------
+            // Set this to true to bypass real payment API
+            $testMode = true;
+            if ($testMode) {
+                // Generate fake payment data
+                $res['check_id'] = 'TEST-' . \Str::uuid();
+                $res['integrity'] = 'TEST_HASH';
+                $res['payment_method'] = $payment_method->payment;
+                $res['invoice_id'] = $transaction->id;
+                $res['scheduled_invoice'] = (int)$scheduled_invoice;
+                $res['entityId'] = 'TEST_ENTITY';  
+
+                // Fake payment link (optional)
+                $res['payment_link'] = url('admin/hyperPay/' . $transaction->id . '/' . $payment_method->id . '/' . $scheduled_invoice . '?hash=TEST_HASH');
+
+                // Update transaction table as “not_paid” or “paid” depending on what you want
+                $transaction?->update([
+                    'pay_id' => $res['check_id'],
+                    'payment_method' => $payment_method->payment,
+                   // 'status' => 'not_paid',  or 'paid' if you want to simulate successful payment
+                ]);
+
+                return $res;
+            }
+            // ---------- END TEST MODE ----------
+
+            // ---------- ORIGINAL CODE (real payment) ----------
         $brand = in_array($payment_method->payment, ['VISA', 'MASTER']) ? 'DEFAULT' : $payment_method->payment;
         $entityId = $this->getIntityId($brand);
         $url = $this->link . "/v1/checkouts";

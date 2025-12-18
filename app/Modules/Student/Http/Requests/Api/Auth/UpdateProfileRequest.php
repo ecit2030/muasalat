@@ -33,9 +33,9 @@ class UpdateProfileRequest extends FormRequest
 
             "date_of_birth"      => "nullable|date|before:today",
             "ussid_number"       => 'nullable|numeric|unique:users,ussid_number,' . $id,
-            "ussid"              => "nullable|image|mimes:png,jpeg,gif|max:5000",
-            "avatar"             => "nullable|image|mimes:png,jpeg,gif|max:5000",
-            "driver_license"     => "nullable|image|mimes:png,jpeg,gif|max:5000",
+            "ussid"              => "nullable|image|mimes:png,jpg,jpeg,gif", //|max:5000
+            "avatar"             => "nullable|image|mimes:png,jpg,jpeg,gif", //|max:5000
+            "driver_license"     => "nullable|image|mimes:png,jpg,jpeg,gif", //|max:5000
             "bank_name"          => "nullable|string|max:100",
             "bank_personal_id"   => "nullable|numeric|unique:users,bank_personal_id," . $id,
             "driver_license_number"   => "nullable|numeric|unique:users,driver_license_number," . $id,
