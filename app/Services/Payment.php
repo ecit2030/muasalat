@@ -66,7 +66,9 @@ class Payment
                 $transaction?->update([
                     'pay_id' => $res['check_id'],
                     'payment_method' => $payment_method->payment,
-                   // 'status' => 'not_paid',  or 'paid' if you want to simulate successful payment
+                    'status' => 'paid',
+                    'amount' => round($transaction->amount, 2) ,
+                    'paid_at' => now(),
                 ]);
 
                 return $res;

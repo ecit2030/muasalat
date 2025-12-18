@@ -517,6 +517,11 @@ class TripV2Controller extends ApiController
 
     private function createTripChat($trip): void
     {
+        Chat::firstOrCreate([
+            'trip_id'    => $trip->id,
+            'sender_id'  => auth()->id(),
+            'receiver_id'=> 0,
+        ]);
         /*
             Chat::updateOrCreate([
                 'trip_id' => $trip->id
@@ -525,11 +530,6 @@ class TripV2Controller extends ApiController
                 'receiver_id' => 0
             ]);
         */
-        Chat::firstOrCreate([
-            'trip_id'    => $trip->id,
-            'sender_id'  => auth()->id(),
-            'receiver_id'=> 0,
-        ]);
     }
 
     public function settings()
