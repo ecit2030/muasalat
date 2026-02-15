@@ -53,7 +53,15 @@
             <a href="#" class="menu-link px-5">
                 <span class="menu-title position-relative">{{t_('language')}}
                     <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">{{ $currentLanguage?->name }}
-                        <img class="w-15px h-15px rounded-1 ms-2" src="{{ asset($currentLanguage?->flag ?? ($language->code == 'ar' ? asset('dashboard/media/flags/saudi-arabia.svg') : asset('dashboard/media/flags/united-states.svg'))) }}"
+                        @php
+                            if (!empty($currentLanguage) && $currentLanguage->code === 'ar') {
+                                $flag = 'dashboard/media/flags/saudi-arabia.svg';
+                            } else {
+                                $flag = 'dashboard/media/flags/united-states.svg';
+                            }
+                        @endphp
+
+                        <img class="w-15px h-15px rounded-1 ms-2" src="{{ asset($flag) }}"
                              alt=""/></span></span>
             </a>
             <!--begin::Menu sub-->
