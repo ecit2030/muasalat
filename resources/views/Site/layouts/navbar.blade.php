@@ -48,7 +48,7 @@
                 @foreach (Modules\Language\Models\Language::all() as $Lang)
                     <th class="language" style="width: 200px;" data-code="{{ $Lang->code }}"
                         data-local="{{ $Lang->local }}">
-                        <a class="dropdown-item" href="{{ url('admin') . '/lang/' . $Lang->code }}"> {{ $Lang->name }} </a>
+                        <a class="dropdown-item" href="{{ url('admin') . '/lang/' . $Lang->code }}"> {{ $Lang->name }} !</a>
                     </th>
                 @endforeach
             </div>
