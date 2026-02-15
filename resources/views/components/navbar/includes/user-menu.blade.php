@@ -55,7 +55,7 @@
                     <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">{{ $currentLanguage?->name }}
                         @php
                             $flag = 'dashboard/media/flags/saudi-arabia.svg';
-                            
+
                             if (!empty($currentLanguage) && $currentLanguage->code === 'ar') {
                                 $flag = 'dashboard/media/flags/saudi-arabia.svg';
                             } else {
@@ -75,7 +75,19 @@
                         <a href="{{ route('dashboard.lang', $language->code) }}"
                            class="menu-link d-flex px-5 {{$language->id ==$currentLanguage?->id ? 'active':''}}">
                             <span class="symbol symbol-20px me-4">
-                                <img class="rounded-1" src="{{ asset($language->flag ?? ($language->code == 'ar' ? asset('dashboard/media/flags/saudi-arabia.svg') : asset('dashboard/media/flags/united-states.svg')))  }}" alt=""/>
+                                @php
+                                    $original_flag = 'dashboard/media/flags/saudi-arabia.svg';
+
+                                    if ($language->code === 'ar') {
+                                        $original_flag = 'dashboard/media/flags/saudi-arabia.svg';
+                                    } elseif ($language->code === 'en') {
+                                        $original_flag = 'dashboard/media/flags/united-states.svg';
+                                    } else {
+                                        if (!empty($language->flag)) { $original_flag = $language->flag; }
+                                        else { $original_flag = 'dashboard/media/flags/saudi-arabia.svg'; }
+                                    }
+                                @endphp
+                                <img class="rounded-1" src="{{ asset($original_flag) }}" alt=""/>
                             </span>{{ $language->name }}</a>
                     </div>
                     <!--end::Menu item-->
