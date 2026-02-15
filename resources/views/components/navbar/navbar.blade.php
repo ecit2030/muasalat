@@ -21,7 +21,7 @@
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="{{route('dashboard.home')}}" class="d-lg-none">
-                <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo.webp'))}}" class="h-30px"/>
+                <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo_muasalat.png'))}}" class="h-30px"/>
             </a>
         </div>
         <!--end::Mobile logo-->
