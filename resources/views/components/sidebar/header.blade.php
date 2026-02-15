@@ -2,9 +2,9 @@
     <!--begin::Logo image-->
 
     <a href="{{route('dashboard.home')}}" class="px-1">
-        <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo.webp'))}}"
+        <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo_muasalat.png'))}}"
              class="h-60px app-sidebar-logo-default"/>
-        <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo.webp'))}}"
+        <img alt="Logo" src="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/logo_muasalat.png'))}}"
              class="h-20px app-sidebar-logo-minimize"/>
     </a>
     <!--end::Logo image-->
