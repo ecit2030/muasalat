@@ -54,6 +54,8 @@
                 <span class="menu-title position-relative">{{t_('language')}}
                     <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">{{ $currentLanguage?->name }}
                         @php
+                            $flag = 'dashboard/media/flags/saudi-arabia.svg';
+                            
                             if (!empty($currentLanguage) && $currentLanguage->code === 'ar') {
                                 $flag = 'dashboard/media/flags/saudi-arabia.svg';
                             } else {
