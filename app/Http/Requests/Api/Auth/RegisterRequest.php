@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RegisterRequest extends FormRequest
 {
@@ -34,14 +36,9 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422)
-        );
+        throw new HttpResponseException(sendError(__('validation.error_validation'), $validator->errors()));
     }
 
     /**
