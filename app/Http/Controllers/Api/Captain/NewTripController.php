@@ -283,16 +283,100 @@ class NewTripController extends ApiController
             'accepted_time_for_driver' => null,
         ]);
 
-        Notification::send($trip->client, new FcmNotification(
-            $trip->client?->deviceTokens?->pluck('token')->toArray(),
-            ['ar' => __("messages.you_have_new_notification", [], 'ar'),
-                'en' => __("messages.you_have_new_notification", [], 'en')],
-            ['ar' => __("messages.trip :trip rejected from driver :driver", ['trip' => $trip->id,'driver' => auth()->user()?->name], 'ar'),
-                'en' => __("messages.trip :trip rejected from driver :driver", ['trip' => $trip->id,'driver' => auth()->user()?->name], 'en')],
-            FCMTopic::DRIVER_REJECT_TRIP,
-            FCMAction::DRIVER_OPEN_NEW_TRIPS,
-            $trip->id,
-        ));
+        /* 
+            //send notif to client that the trip canceled 
+            Notification::send($trip->client, new FcmNotification(
+                $trip->client?->deviceTokens?->pluck('token')->toArray(),
+                ['ar' => __("messages.you_have_new_notification", [], 'ar'),
+                    'en' => __("messages.you_have_new_notification", [], 'en')],
+                ['ar' => __("messages.trip :trip rejected from driver :driver", ['trip' => $trip->id,'driver' => auth()->user()?->name], 'ar'),
+                    'en' => __("messages.trip :trip rejected from driver :driver", ['trip' => $trip->id,'driver' => auth()->user()?->name], 'en')],
+                FCMTopic::DRIVER_REJECT_TRIP,
+                FCMAction::DRIVER_OPEN_NEW_TRIPS,
+                $trip->id,
+            ));
+        */
+
+        /* new updates */
+        
+            $driverId = auth()->id();
+            $driverName = auth()->user()?->name;
+
+            /**
+             * ✅ 3. Get NEXT captain (only one)
+             */
+            $nextDriver = User::where('role', 'captain')
+                ->where('id', '!=', $driverId)
+
+                // 🚫 exclude drivers who already rejected THIS trip
+                ->whereDoesntHave('driverTripOffers', function ($q) use ($trip) {
+                    $q->where('trip_id', $trip->id)
+                      ->where('status', 'rejected');
+                })
+
+                // 🟢 optional filters
+                ->where('is_available', 1)
+
+                ->first(); // 👈 ONLY ONE captain
+
+            /**
+             * ✅ 4. Send trip to next captain
+             */
+            if ($nextDriver) {
+
+                // create pending offer
+                $trip->driverTripOffers()->create([
+                    'driver_id' => $nextDriver->id,
+                    'status' => 'pending',
+                ]);
+
+                // update timer again
+                $trip->report()?->update([
+                    'accepted_time_for_driver' => now()->format('Y-m-d H:i:s'),
+                ]);
+
+                /**
+                 * 🔔 Notify NEW captain
+                 */
+                Notification::send($nextDriver, new FcmNotification(
+                    $nextDriver->deviceTokens?->pluck('token')->toArray(),
+                    [
+                        'ar' => __("messages.you_have_new_trip", [], 'ar'),
+                        'en' => __("messages.you_have_new_trip", [], 'en')
+                    ],
+                    [
+                        'ar' => __("messages.new trip available #:trip", ['trip' => $trip->id], 'ar'),
+                        'en' => __("messages.new trip available #:trip", ['trip' => $trip->id], 'en')
+                    ],
+                    FCMTopic::NEW_TRIP,
+                    FCMAction::DRIVER_OPEN_NEW_TRIPS,
+                    $trip->id,
+                ));
+            }
+
+            /**
+             * 🔔 5. Notify CLIENT
+             */
+            Notification::send($trip->client, new FcmNotification(
+                $trip->client?->deviceTokens?->pluck('token')->toArray(),
+                [
+                    'ar' => __("messages.you_have_new_notification", [], 'ar'),
+                    'en' => __("messages.you_have_new_notification", [], 'en')
+                ],
+                [
+                    'ar' => $nextDriver
+                        ? __("messages.trip :trip rejected from driver :driver and sent to another captain", ['trip' => $trip->id, 'driver' => $driverName], 'ar')
+                        : __("messages.trip :trip rejected from driver :driver and no drivers available", ['trip' => $trip->id, 'driver' => $driverName], 'ar'),
+
+                    'en' => $nextDriver
+                        ? __("messages.trip :trip rejected from driver :driver and sent to another captain", ['trip' => $trip->id, 'driver' => $driverName], 'en')
+                        : __("messages.trip :trip rejected from driver :driver and no drivers available", ['trip' => $trip->id, 'driver' => $driverName], 'en'),
+                ],
+                FCMTopic::DRIVER_REJECT_TRIP,
+                FCMAction::DRIVER_OPEN_NEW_TRIPS,
+                $trip->id,
+            ));
+
 
         return sendResponse(__("messages.trip rejected"));
     }
