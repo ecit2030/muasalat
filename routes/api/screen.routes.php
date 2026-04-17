@@ -24,6 +24,13 @@ Route::middleware('guest')->as('auth.')->group(function () {
 Route::group(['prefix' => 'static_pages'], function () {
     Route::get('terms', [StaticPageController::class, 'terms']);
     Route::get('privacy', [StaticPageController::class, 'privacy']);
+
+    Route::get('terms_client', [StaticPageController::class, 'terms_client']);
+    Route::get('privacy_client', [StaticPageController::class, 'privacy_client']);
+
+    Route::get('terms_driver', [StaticPageController::class, 'terms_driver']);
+    Route::get('privacy_driver', [StaticPageController::class, 'privacy_driver']);
+
     Route::get('about', [StaticPageController::class, 'about']);
 });
 
