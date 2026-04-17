@@ -38,7 +38,7 @@ class PageController extends DashboardController
  
     protected function store(Request $request)
     {
-        $permissionList = PermissionsList::create([
+        $pages = StaticPage::create([
             'title' => [
                 'ar' => $request->title['ar'],
                 'en' => $request->title['en'],
