@@ -39,10 +39,7 @@ class PageController extends DashboardController
     protected function store(Request $request)
     {
         $pages = StaticPage::create([
-            'title' => [
-                'ar' => $request->title['ar'],
-                'en' => $request->title['en'],
-            ],
+            'title' => $request->title,
             'content' => 'aa',
         ]);
 
