@@ -81,7 +81,7 @@
                                                   lang="{{$lang->code}}"
                                                   class="tinymce_textarea"
                                                   dir="{{$lang->direction}}"
-                                                  value="{{$cont?->content}}"
+                                                  value="{{$cont?->content[$lang->code]}}"
                                                   />
 
                                 </div>
