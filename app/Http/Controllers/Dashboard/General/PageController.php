@@ -36,16 +36,6 @@ class PageController extends DashboardController
         ]);
     }
  
-    protected function store(Request $request)
-    {
-        $pages = StaticPage::create([
-            'title' => $request->title,
-            'content' => 'aa',
-        ]);
-
-        return redirect()->route("dashboard.general.pages.index");
-    }
-
     protected function update(Request $request, $id)
     {
         $validated = Validator::make($request->all(), [
