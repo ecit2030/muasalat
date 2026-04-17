@@ -35,7 +35,19 @@ class PageController extends DashboardController
             'title' => "",
         ]);
     }
+ 
+    protected function store(Request $request)
+    {
+        $permissionList = PermissionsList::create([
+            'title' => [
+                'ar' => $request->title['ar'],
+                'en' => $request->title['en'],
+            ],
+            'content' => 'aa',
+        ]);
 
+        return redirect()->route("dashboard.general.pages.index");
+    }
 
     protected function update(Request $request, $id)
     {
