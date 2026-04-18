@@ -24,7 +24,7 @@ class Sidebar
             $generator->addModule(t_('captain'), 'icon-home')->push($this->captain());
             $generator->addModule(t_('vehicle'), 'icon-home')->push($this->vehicle());
             $generator->addModule(t_('driver'), 'icon-home')->push($this->driver());
-            $generator->addModule(t_('track'), 'icon-home')->push($this->track());
+//            $generator->addModule(t_('track'), 'icon-home')->push($this->track());
             $generator->addModule(t_('trip'), 'icon-home')->push($this->trip());
             $generator->addModule(t_('setting'), 'icon-home')->push($this->setting());
             $generator->addModule(t_('wallet'), 'icon-home')->push($this->wallet());
