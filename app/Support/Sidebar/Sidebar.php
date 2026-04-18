@@ -16,7 +16,7 @@ class Sidebar
         if (activeGuard('dashboard')) {
             $generator->addModule(t_('dashboard'), 'icon-home', false)->push($this->dashboard());
             $generator->addModule(t_('general'), 'icon-home')->push($this->general());
-            // $generator->addModule(t_('area'), 'icon-home')->push($this->area());
+             $generator->addModule(t_('area'), 'icon-home')->push($this->area());
             $generator->addModule(t_('user'), 'icon-home')->push($this->user());
             $generator->addModule(t_('chats'), 'icon-rocketchat')->push($this->chats());
             $generator->addModule(t_('notification'), 'icon-home')->push($this->notification());
@@ -24,7 +24,7 @@ class Sidebar
             $generator->addModule(t_('captain'), 'icon-home')->push($this->captain());
             $generator->addModule(t_('vehicle'), 'icon-home')->push($this->vehicle());
             $generator->addModule(t_('driver'), 'icon-home')->push($this->driver());
-//            $generator->addModule(t_('track'), 'icon-home')->push($this->track());
+          //  $generator->addModule(t_('track'), 'icon-home')->push($this->track());
             $generator->addModule(t_('trip'), 'icon-home')->push($this->trip());
             $generator->addModule(t_('setting'), 'icon-home')->push($this->setting());
             $generator->addModule(t_('wallet'), 'icon-home')->push($this->wallet());
@@ -192,7 +192,7 @@ class Sidebar
     {
         $adminList = [
             SidebarLink::to(t_('trips index'), route('dashboard.trips.trips.index')),
-//            SidebarLink::to(t_('trips by track index'), route('dashboard.trips.trips.indextrack')),
+           // SidebarLink::to(t_('trips by track index'), route('dashboard.trips.trips.indextrack')),
         ];
 
         return [
