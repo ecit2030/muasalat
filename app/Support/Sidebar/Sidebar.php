@@ -16,7 +16,7 @@ class Sidebar
         if (activeGuard('dashboard')) {
             $generator->addModule(t_('dashboard'), 'icon-home', false)->push($this->dashboard());
             $generator->addModule(t_('general'), 'icon-home')->push($this->general());
-             $generator->addModule(t_('area'), 'icon-home')->push($this->area());
+            // $generator->addModule(t_('area'), 'icon-home')->push($this->area());
             $generator->addModule(t_('user'), 'icon-home')->push($this->user());
             $generator->addModule(t_('chats'), 'icon-rocketchat')->push($this->chats());
             $generator->addModule(t_('notification'), 'icon-home')->push($this->notification());
