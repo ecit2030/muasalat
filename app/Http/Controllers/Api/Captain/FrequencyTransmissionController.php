@@ -21,7 +21,13 @@ class FrequencyTransmissionController extends ApiController
 
         $items = $query->get();
 
-        return sendResponse(FrequencyTransmissionResource::collection($items));
+        return $this->apiCode(200)
+            ->apiBody([
+                'data' => FrequencyTransmissionResource::collection($items),
+            ])
+            ->apiMessage('')
+            ->apiInfo('captain frequency transmissions index')
+            ->apiResponse();
     }
 
     /**
@@ -32,13 +38,21 @@ class FrequencyTransmissionController extends ApiController
     public function decide(Request $request, FrequencyTransmission $frequencyTransmission)
     {
         if ($frequencyTransmission->driver_id !== auth()->id()) {
-            return sendError(t_("you dont have permisssion to access this resource"), [], 403);
+            return $this->apiCode(403)
+                ->apiBody([])
+                ->apiMessage(t_("you dont have permisssion to access this resource"))
+                ->apiInfo('captain frequency transmissions decide forbidden')
+                ->apiResponse();
         }
 
         if ((int) $frequencyTransmission->status_driver !== 0) {
-            return sendError(__("messages.Trip Has Pending Request") ?: "Only pending requests can be updated", [
-                'status_driver' => (int) $frequencyTransmission->status_driver,
-            ], 422);
+            return $this->apiCode(422)
+                ->apiBody([
+                    'status_driver' => (int) $frequencyTransmission->status_driver,
+                ])
+                ->apiMessage(__("messages.Trip Has Pending Request") ?: "Only pending requests can be updated")
+                ->apiInfo('captain frequency transmissions decide not pending')
+                ->apiResponse();
         }
 
         $data = $request->validate([
@@ -50,7 +64,13 @@ class FrequencyTransmissionController extends ApiController
             'updated_by' => auth()->id(),
         ]);
 
-        return sendResponse(new FrequencyTransmissionResource($frequencyTransmission->fresh()));
+        return $this->apiCode(200)
+            ->apiBody([
+                'data' => new FrequencyTransmissionResource($frequencyTransmission->fresh()),
+            ])
+            ->apiMessage('')
+            ->apiInfo('captain frequency transmissions decide success')
+            ->apiResponse();
     }
 }
 
