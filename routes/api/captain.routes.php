@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Captain\TrackController;
 use App\Http\Controllers\Api\Captain\TripController;
 use App\Http\Controllers\Api\Captain\NewTripController;
 use App\Http\Controllers\Api\Captain\WalletController;
+use App\Http\Controllers\Api\Captain\FrequencyTransmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::name("captain.")->middleware("role:captain")->prefix("captain")->group(function () {
@@ -29,5 +30,9 @@ Route::name("captain.")->middleware("role:captain")->prefix("captain")->group(fu
     Route::get("wallet/page" ,[WalletController::class , "walletPage"] );
     Route::get("wallet/withdraws" ,[WalletController::class , "walletWithDraws"] );
     Route::post("wallet/withdraw/order" ,[WalletController::class , "walletWithDrawOrder"] );
+
+    // Frequency Transmissions
+    Route::get("frequency-transmissions", [FrequencyTransmissionController::class, "index"]);
+    Route::patch("frequency-transmissions/{frequencyTransmission}/decide", [FrequencyTransmissionController::class, "decide"]);
 });
 
