@@ -18,6 +18,7 @@ Route::get('frequencytransmissions',[FrequencytransmissionController::class,'ind
 Route::get('frequencytransmissions/create',[FrequencytransmissionController::class,'create'])->name('trips.frequencytransmissions.create');
 Route::post('frequencytransmissions/store',[FrequencytransmissionController::class,'store'])->name('trips.frequencytransmissions.store');
 Route::get('frequencytransmissions/{id}',[FrequencytransmissionController::class,'show'])->name('trips.frequencytransmissions.show');
+Route::get('frequencytransmissions-trips',[FrequencytransmissionController::class,'trips'])->name('trips.frequencytransmissions.trips');
 Route::delete('frequencytransmissions/{id}',[FrequencytransmissionController::class,'destroy'])->name('trips.frequencytransmissions.destroy');
 Route::put('frequencytransmissions/{id}/change-driver',[FrequencytransmissionController::class, 'changeDriver'])->name('.trips.frequencytransmissions.changeDriver');
 

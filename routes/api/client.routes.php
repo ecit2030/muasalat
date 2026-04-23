@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Client\TalebatSearchController;
 use App\Http\Controllers\Api\Client\TripController;
 use App\Http\Controllers\Api\Client\TripV2Controller;
 use App\Http\Controllers\Api\Client\WalletController;
+use App\Http\Controllers\Api\Client\FrequencyTransmissionController;
 use App\Http\Controllers\Api\Screen\Sidebar\SettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,11 @@ Route::name("client.")->middleware("role:user")->prefix("client")->group(functio
     Route::post("trips/pay-trip/{trip}", [TripV2Controller::class, "payTripAfterAcceptedForCaptain"]);
     Route::post("trips/cancel-trip/{trip}", [TripV2Controller::class, "cancelTrip"]);
     Route::get("trip/settings", [TripV2Controller::class, "settings"]);
+
+    // Frequency Transmissions (التنقل الترددي)
+    Route::get("frequency-transmissions", [FrequencyTransmissionController::class, "index"]);
+    Route::get("frequency-transmissions/{frequencyTransmission}", [FrequencyTransmissionController::class, "show"]);
+    Route::post("frequency-transmissions/{frequencyTransmission}/book", [FrequencyTransmissionController::class, "book"]);
     // Trip
 //    Route::apiResource("trips", TripController::class)->only(['index', 'show', 'store']);
 //    Route::post("trips/search", [TripController::class, "search"]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Trip;
 
 use App\Datatables\Dashboard\Trip\FrequencytransmissionDatatable;
+use App\Datatables\Dashboard\Trip\FrequencyTransmissionTripsDatatable;
 use App\Datatables\Dashboard\Trip\TripByTrackDatatable;
 use App\Datatables\Dashboard\Trip\TripDatatable;
 use App\Exports\TripExport;
@@ -47,6 +48,17 @@ class FrequencytransmissionController extends DashboardController
             'currentLanguage' => get_current_lang(),
             'title' => "",
             'status' => request('status'),
+        ]);
+    }
+
+    public function trips()
+    {
+        $datatable = FrequencyTransmissionTripsDatatable::class;
+
+        return $datatable::create($this->viewPath)->render("{$this->viewPath}.trips", [
+            'route' => $this->routeName,
+            'currentLanguage' => get_current_lang(),
+            'title' => "",
         ]);
     }
 

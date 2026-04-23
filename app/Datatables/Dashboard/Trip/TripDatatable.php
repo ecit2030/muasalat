@@ -34,6 +34,14 @@ class TripDatatable extends BaseDatatable
                     });
                 });
         }
+        // Exclude frequency bookings from the main Trips page
+        $data->where(function ($q) {
+            $q->whereNull('trip_type')
+                ->orWhere('trip_type', '!=', 'frequency');
+        })->whereDoesntHave('report', function ($qr) {
+            $qr->where('reservation_type', 'frequency');
+        });
+
         return $data->orderBy('id','DESC');
     }
 
@@ -41,6 +49,10 @@ class TripDatatable extends BaseDatatable
     protected function getCustomColumns(): array
     {
         return [
+            'trip_type' => function ($model) {
+                $type = $model?->trip_type ?: ($model?->report?->reservation_type ?: '--');
+                return view('components.datatable.includes.columns.title', ["title" => $type]);
+            },
 
             'time' => function ($model) {
                 return view('components.datatable.includes.columns.title', ["title" => $model?->time ?? '--']);
@@ -93,6 +105,7 @@ class TripDatatable extends BaseDatatable
     protected function getColumns(): array
     {
         return [
+            Column::make('trip_type')->title(t_('trip_type')),
             Column::make('date')->title(t_('date')),
             Column::make('time')->title(t_('time')),
 //            Column::make('trackName')->title(t_('track')),
@@ -109,6 +122,14 @@ class TripDatatable extends BaseDatatable
     protected function getFilters(): array
     {
         $data = [
+            'trip_type' => function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('trip_type', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('report', function ($qr) use ($keyword) {
+                            $qr->where('reservation_type', 'like', '%' . $keyword . '%');
+                        });
+                });
+            },
             'date' => function ($query, $keyword) {
                 $query->where('date', 'like', '%' . $keyword . '%');
             },

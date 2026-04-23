@@ -33,7 +33,7 @@
         @endphp
 
         <div class="d-flex flex-stack flex-wrap gap-4 mb-6 {{ $isRtl ? 'flex-row-reverse' : '' }}">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2">
                 <a href="{{ route('dashboard.trips.frequencytransmissions.create') }}" class="btn btn-sm btn-primary px-5">
                     <span class="svg-icon svg-icon-2 me-2 {{ $isRtl ? 'ms-2 me-0' : '' }}">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,6 +42,10 @@
                         </svg>
                     </span>
                     {{ t_('add frequencytransmission') }}
+                </a>
+
+                <a href="{{ route('dashboard.trips.frequencytransmissions.trips') }}" class="btn btn-sm btn-light px-5">
+                    {{ t_('clients selected trips') }}
                 </a>
             </div>
 
