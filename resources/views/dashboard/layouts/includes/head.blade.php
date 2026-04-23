@@ -1,8 +1,13 @@
 <head>
     <base href="{{url('/')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @php
+        $langCode = $session_get('language.code');
+        $generalName = setting('general', "name.{$langCode}", setting('general', 'name', config('app.name')));
+        $appName = is_array($generalName) ? ($generalName[$langCode] ?? reset($generalName) ?? config('app.name')) : $generalName;
+    @endphp
     <!-- Title -->
-    <title>@yield('title') | {{setting('general',"name.{$session_get('language.code')}",config('app.name'))}}</title>
+    <title>@yield('title') | {{ $appName }}</title>
     <!-- Meta -->
     <link rel="shortcut icon" href="{{setting('media','white_fav_icon.url',asset('site/images/logo2.png'))}}"/>
     {{-- <link rel="shortcut icon" href="{{setting('media','white_fav_icon.url',asset('dashboard/media/logos/favicon.ico'))}}"/> --}}

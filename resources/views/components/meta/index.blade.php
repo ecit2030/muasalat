@@ -3,6 +3,14 @@
 <?php
 $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
+@php
+    $langCode = $session_get('language.code');
+    $generalName = setting('general', "name.{$langCode}", setting('general', 'name', config('app.name')));
+    $siteName = is_array($generalName) ? ($generalName[$langCode] ?? reset($generalName) ?? config('app.name')) : $generalName;
+
+    $generalDescription = setting('general', "description.{$langCode}", setting('general', 'description', ''));
+    $siteDescription = is_array($generalDescription) ? ($generalDescription[$langCode] ?? reset($generalDescription) ?? '') : $generalDescription;
+@endphp
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link rel="canonical" href="{{$actual_link}}">
@@ -14,18 +22,18 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 
 <!-- Start SEO Meta TAG -->
 <meta property="og:url" content="{{$actual_link}}">
-<meta property="og:site_name" content="{{setting('general',"name.{$session_get('language.code')}")}}"/>
+<meta property="og:site_name" content="{{ $siteName }}"/>
 <meta property="website:published_time" content="2022-2-28T17:57:00+00:00">
 <meta property="og:image" content="{{setting('media','dark_dashboard_logo.url',asset('dashboard/media/logos/favicon.ico'))}}">
-<meta name="title" content="{{setting('general',"name.{$session_get('language.code')}",config('app.name'))}}">
-<meta name="description" content="{{setting('general',"description.{$session_get('language.code')}",config('app.description'))}}"/>
-<meta name="keywords" content="{{setting('general',"description.{$session_get('language.code')}",config('app.name'))}}"/>
+<meta name="title" content="{{ $siteName }}">
+<meta name="description" content="{{ $siteDescription }}"/>
+<meta name="keywords" content="{{ $siteDescription ?: $siteName }}"/>
 <meta name="language" content="{{get_current_lang()}}">
 <meta name="author" content="{{setting('general',"author",config('app.name'))}}">
 <meta property="og:locale" content="{{ str_replace('_', '-', app()->getLocale()) }}"/>
 <meta property="og:type" content="Website">
-<meta property="og:title" content="{{setting('general',"name.{$session_get('language.code')}",config('app.name'))}}"/>
-<meta property="og:description" content="{{setting('general',"description.{$session_get('language.code')}",config('app.description'))}}"/>
-<meta property="twitter:title" content="{{setting('general',"name.{$session_get('language.code')}",config('app.name'))}}"/>
-<meta property="twitter:description" content="{{setting('general',"description.{$session_get('language.code')}",config('app.description'))}}"/>
+<meta property="og:title" content="{{ $siteName }}"/>
+<meta property="og:description" content="{{ $siteDescription }}"/>
+<meta property="twitter:title" content="{{ $siteName }}"/>
+<meta property="twitter:description" content="{{ $siteDescription }}"/>
 
