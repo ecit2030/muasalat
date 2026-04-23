@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        /*
         // 1️⃣ Remove duplicate chats (keep only the oldest)
         DB::statement("
             DELETE c1
@@ -36,10 +37,12 @@ return new class extends Migration {
             // 5️⃣ Re-enable foreign key checks
             Schema::enableForeignKeyConstraints();
         });
+        */
     }
 
     public function down(): void
     {
+        /*
         Schema::table('chats', function (Blueprint $table) {
             Schema::disableForeignKeyConstraints();
 
@@ -51,5 +54,6 @@ return new class extends Migration {
 
             Schema::enableForeignKeyConstraints();
         });
+        */
     }
 };

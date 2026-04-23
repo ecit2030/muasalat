@@ -159,6 +159,9 @@ return [
     'trip' => 'رحلة',
     'the trip' => 'الرحلة',
     'trips' => 'الرحلات',
+
+    'frequencytransmissions' => 'النقل الترددي',
+
     'Payment Method' => 'طريقة الدفع',
     'trip date' => 'تاريخ الرحلة',
     'trip total' => 'المجموع الكلي للرحلة',

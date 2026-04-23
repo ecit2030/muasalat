@@ -18,16 +18,17 @@ class Sidebar
             $generator->addModule(t_('general'), 'icon-home')->push($this->general());
             // $generator->addModule(t_('area'), 'icon-home')->push($this->area());
             $generator->addModule(t_('user'), 'icon-home')->push($this->user());
-            $generator->addModule(t_('chats'), 'icon-rocketchat')->push($this->chats());
-            $generator->addModule(t_('notification'), 'icon-home')->push($this->notification());
             $generator->addModule(t_('organization'), 'icon-home')->push($this->organization());
             $generator->addModule(t_('captain'), 'icon-home')->push($this->captain());
             $generator->addModule(t_('vehicle'), 'icon-home')->push($this->vehicle());
-            $generator->addModule(t_('driver'), 'icon-home')->push($this->driver());
+           // $generator->addModule(t_('driver'), 'icon-home')->push($this->driver());
           //  $generator->addModule(t_('track'), 'icon-home')->push($this->track());
-            $generator->addModule(t_('trip'), 'icon-home')->push($this->trip());
-            $generator->addModule(t_('setting'), 'icon-home')->push($this->setting());
+            $generator->addModule(t_('frequencytransmission'), 'icon-home')->push($this->frequencytransmission());
+            $generator->addModule(t_('trip'), 'icon-home')->push($this->trip());            
+            $generator->addModule(t_('chats'), 'icon-rocketchat')->push($this->chats());
+            $generator->addModule(t_('notification'), 'icon-home')->push($this->notification());
             $generator->addModule(t_('wallet'), 'icon-home')->push($this->wallet());
+            $generator->addModule(t_('setting'), 'icon-home')->push($this->setting());
         }
 
         return $generator->toArray();
@@ -133,11 +134,17 @@ class Sidebar
 
     public function organization()
     {
+        $admin = auth()->user()->hasRole("admin");
 
         $adminList = [
             SidebarLink::to(t_('organizations index'), route('dashboard.organization.organization.index'), permission: 'view_organization'),
             SidebarLink::to(t_('organizations request'), route('dashboard.organization.organizationRequest.index'), permission: 'view_organization_request'),
+            SidebarLink::to(t_('create') . ' ' .t_('organization'), route('dashboard.organization.organization.create'), permission: 'view_organization'),
+            SidebarLink::to(t_('drivers index'), route('dashboard.driver.driver.index'), permission: 'view_driver'),
         ];
+        if(!$admin){
+            $adminList[] = SidebarLink::to(t_('add driver'), route('dashboard.driver.driver.create'), permission: 'create_driver');
+        }
 
         return [
             SidebarMenu::create(t_('organizations manage'), 'las la-building', permission: 'view_organization')
@@ -212,6 +219,19 @@ class Sidebar
 
         return [
             SidebarMenu::create(t_('wallet manage'), 'las la-map', permission: 'view_user_withdraw')
+                ->push($adminList),
+        ];
+    }
+
+    public function frequencytransmission()
+    {
+         $adminList = [
+            SidebarLink::to(t_('add frequencytransmission'), route('dashboard.trips.frequencytransmissions.create'), permission: 'create_track'),
+            SidebarLink::to(t_('frequencytransmissions index'), route('dashboard.trips.frequencytransmissions.index')),
+        ];
+
+        return [
+            SidebarMenu::create(t_('frequencytransmissions manage'), 'las la-map', permission: 'view_trip')
                 ->push($adminList),
         ];
     }

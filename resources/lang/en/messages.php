@@ -151,6 +151,7 @@ return [
     'trip' => 'Trip',
     'the trip' => 'The Trip',
     'trips' => 'Trips',
+    'frequencytransmissions' => 'Frequency Transmissions',
     'Payment Method' => 'Payment Method',
     'trip date' => 'Trip Date',
     'trip total' => 'Trip Total',

@@ -6,6 +6,7 @@ use App\Support\Actions\PermissionAction;
 
 /**
  * @method static self analyse()
+ * @method static self frequency_transmission()
  * @method static self wallet()
  * @method static self transaction()
  * @method static self driver_trip_offer()
