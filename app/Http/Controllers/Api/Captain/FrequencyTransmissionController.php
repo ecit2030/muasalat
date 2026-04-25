@@ -13,11 +13,14 @@ class FrequencyTransmissionController extends ApiController
     {
         $query = FrequencyTransmission::query()
             ->where('driver_id', auth()->id())
+            ->whereIn('status_driver', [0, 1])
             ->latest('id');
 
-        if ($request->filled('status_driver')) {
+        if ($request->filled('status_driver') && in_array($request->status_driver, [0, 1])) {
             $query->where('status_driver', (int) $request->status_driver);
-        }
+        } else {
+            $query->whereIn('status_driver', [0, 1]);
+        } 
 
         $items = $query->get();
 
