@@ -83,9 +83,9 @@ class FrequencyTransmissionController extends ApiController
         }
 
         $data = $request->validate([
-            'origin' => 'nullable|array',
-            'origin.lat' => 'nullable|numeric',
-            'origin.lng' => 'nullable|numeric',
+            'origin' => 'required|array',
+            'origin.lat' => 'required|numeric',
+            'origin.lng' => 'required|numeric',
             'origin.address' => 'nullable|string',
             'date' => 'nullable|date_format:Y-m-d',
         ]);
