@@ -64,6 +64,7 @@ class FrequencyTransmissionController extends ApiController
 
         $frequencyTransmission->update([
             'status_driver' => (int) $data['status_driver'],
+            'is_active' => ((int) $data['status_driver'] === 1) ? 1 : 0,
             'updated_by' => auth()->id(),
         ]);
 
