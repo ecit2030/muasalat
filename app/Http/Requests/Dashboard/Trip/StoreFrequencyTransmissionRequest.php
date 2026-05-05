@@ -22,6 +22,12 @@ class StoreFrequencyTransmissionRequest extends FormRequest
             'origin.location' => 'nullable|string|max:200',
             'destination.location' => 'nullable|string|max:200',
 
+            'origin.lat' => 'nullable|string|max:200',
+            'destination.lat' => 'nullable|string|max:200',
+
+            'origin.lng' => 'nullable|string|max:200',
+            'destination.lng' => 'nullable|string|max:200',
+
             'repeat' => 'nullable|array|min:1|max:7',
             'repeat.*' => 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
 

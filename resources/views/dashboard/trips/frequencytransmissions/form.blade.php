@@ -18,21 +18,27 @@
         :label="t_('name')" 
     />
 
-    <div class="row">
+     
         {{-- Origin --}}
-        <div class="form-group mt-3 col-6">
+        <div class="form-group mt-3 row">
             <label>{{ t_('origin_point') }}</label>
-            <input type="text" name="origin[location]" class="form-control"
-                   value="{{ $origin['location'] ?? null }}">
+            <div class="row">
+                <input type="text" name="origin[lat]" id="origin_lat" value="{{ $origin['lat'] ?? '' }}" placeholder="خط العرض"  class="col-md-4" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+                <input type="text" name="origin[lng]" id="origin_lng" value="{{ $origin['lng'] ?? '' }}" placeholder="خط  الطول"  class="col-md-4" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+                <input type="text" name="origin[location]" class="col-md-4" placeholder="اسم الموقع" value="{{ $origin['location'] ?? null }}" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+            </div>
         </div>
 
         {{-- Destination --}}
-        <div class="form-group mt-3 col-6">
+        <div class="form-group mt-3 row">
             <label>{{ t_('destination_point') }}</label>
-            <input type="text" name="destination[location]" class="form-control"
-                   value="{{ $destination['location'] ?? null }}">
+            <div class="row">
+                <input type="text" name="destination[lat]" id="destination_lat" placeholder="خط العرض" value="{{ $destination['lat'] ?? '' }}"  class="col-md-4" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+                <input type="text" name="destination[lng]" id="destination_lng" placeholder="خط  الطول" value="{{ $destination['lng'] ?? '' }}"  class="col-md-4" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+                <input type="text" name="destination[location]"  class="col-md-4" placeholder="اسم الموقع" value="{{ $destination['location'] ?? null }}" style="color: var(--kt-input-color);background-color: var(--kt-input-bg);border: 1px solid var(--kt-input-border-color);box-shadow: none !important;border-radius: 0.475rem;padding: 0.775rem 1rem;font-size: 1.1rem;font-weight: 500;">
+            </div>
         </div> 
-    </div>
+     
     <div class="row">
         {{-- Date --}}
         <div class="form-group mt-3 col-6">
@@ -137,5 +143,6 @@
 
         </div>
     </div> 
+
 
 </x-form>
