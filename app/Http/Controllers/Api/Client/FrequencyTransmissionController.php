@@ -20,7 +20,7 @@ class FrequencyTransmissionController extends ApiController
      *
      * Query params:
      * - origin_lat, origin_lng: optional, to filter by nearest (range from setting general.searchRange)
-     */
+    
     public function index(Request $request)
     {
         $request->validate([
@@ -57,6 +57,73 @@ class FrequencyTransmissionController extends ApiController
         }
 
         return sendResponse(FrequencyTransmissionResource::collection($query->get()));
+    }
+     */
+    public function index(Request $request)
+    {
+        $request->validate([
+            'origin_lat' => 'nullable|numeric',
+            'origin_lng' => 'nullable|numeric',
+            'destination_lat' => 'nullable|numeric',
+            'destination_lng' => 'nullable|numeric',
+        ]);
+
+        $radiusInKM = setting('general', 'searchRange', 5);
+
+        $query = FrequencyTransmission::query()
+            ->where('is_active', 1)
+            ->where('status_driver', 1)
+            ->latest('id');
+
+        $originLat = $request->origin_lat;
+        $originLng = $request->origin_lng;
+
+        $destinationLat = $request->destination_lat;
+        $destinationLng = $request->destination_lng;
+
+        $query->where(function (Builder $builder) use (
+            $originLat, $originLng,
+            $destinationLat, $destinationLng,
+            $radiusInKM
+        ) {
+
+            // 📍 فلترة origin (إذا موجودة)
+            if (!is_null($originLat) && !is_null($originLng)) {
+                $builder->whereRaw("
+                    6371 * acos(
+                        cos(radians(?)) * cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7)))) *
+                        cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lng')) AS DECIMAL(10, 7))) - radians(?)) +
+                        sin(radians(?)) * sin(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7))))
+                    ) <= ?
+                ", [
+                    $originLat,
+                    $originLng,
+                    $originLat,
+                    $radiusInKM,
+                ]);
+            }
+
+            // 📍 فلترة destination (إذا موجودة)
+            if (!is_null($destinationLat) && !is_null($destinationLng)) {
+                $builder->whereRaw("
+                    6371 * acos(
+                        cos(radians(?)) * cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lat')) AS DECIMAL(10, 7)))) *
+                        cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lng')) AS DECIMAL(10, 7))) - radians(?)) +
+                        sin(radians(?)) * sin(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lat')) AS DECIMAL(10, 7))))
+                    ) <= ?
+                ", [
+                    $destinationLat,
+                    $destinationLng,
+                    $destinationLat,
+                    $radiusInKM,
+                ]);
+            }
+
+        });
+
+        return sendResponse(
+            FrequencyTransmissionResource::collection($query->get())
+        );
     }
 
     public function show(FrequencyTransmission $frequencyTransmission)
