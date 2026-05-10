@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Storage;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
 use Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\Http;
+use App\Models\Transaction;
 
 class TripV2Controller extends ApiController
 {
@@ -397,7 +399,8 @@ class TripV2Controller extends ApiController
         return sendResponse(__('messages.trip is canceled'));
     }
 
-    public function payTripAfterAcceptedForCaptain(Request $request, Trip $trip)
+   
+  public function payTripAfterAcceptedForCaptain(Request $request, Trip $trip)
     {
         $request->validate([
             'payment_method' => 'required|in:online,wallet',
@@ -418,27 +421,30 @@ class TripV2Controller extends ApiController
                 ->walletCreate();
 
             $trip->report()?->update(['payment_method' => 'wallet', 'is_paid' => 1, "accepted_time" => null]);
-        } else {
+        }  else {
 
-            $invoice_number = str_pad(mt_rand(1, 9999999999), 10, '0', STR_PAD_LEFT);
-            $transactionData['invoice_number'] = $invoice_number;
-            $transactionData['type'] = 'pay_trip';
-            $transactionData['trip_id'] = $trip->id;
+    $invoice_number = str_pad(mt_rand(1, 9999999999), 10, '0', STR_PAD_LEFT);
 
-            $transaction = auth()->user()?->transactions()->create([
-                'pay_data' => $transactionData,
-                'pay_id' => Str::uuid(),
-                'payment_method' => 'online',
-                'amount' => $trip->report?->total,
-                'transaction_reasons' => 'pay_trip',
-                'status' => 'not_paid',
-            ]);
+    $transactionData = [
+        'invoice_number' => $invoice_number,
+        'type' => 'pay_trip',
+        'trip_id' => $trip->id,
+    ];
 
+    $transaction = auth()->user()->transactions()->create([
+        'pay_data' => $transactionData,
+        'pay_id' => (string) Str::uuid(),
+        'payment_method' => 'moyasar',
+        'amount' => $trip->report?->total,
+        'transaction_reasons' => 'pay_trip',
+        'status' => 'not_paid',
+    ]);
 
-            $checkout = new \App\Services\Payment();
-            return $checkout->getCheckout($transaction, $request->payment_method_id, $scheduled_invoice = 0);
-
-        }
+    return response()->json([
+        'status' => true,
+        'payment_url' => route('api.moyasar.trip.page', $transaction->id),
+    ]);
+}
         event(new ClientPayTripEvent($trip));
 
         $trip->driver?->notify(new FcmNotification(
@@ -458,7 +464,87 @@ class TripV2Controller extends ApiController
 
         return sendResponse(__("messages.trip is paid"));
     }
+public function moyasarTripPage(Transaction $transaction)
+{
+   
+    abort_if($transaction->status === 'paid', 403);
 
+    $paymentAmount = (float) $transaction->amount;
+    $number = (int) round($paymentAmount * 100);
+
+    $description = 'Pay Trip #' . ($transaction->pay_data['trip_id'] ?? '');
+    $lang = app()->getLocale();
+
+    return view('payments.moyasar-trip', compact(
+        'transaction',
+        'number',
+        'description',
+        'lang'
+    ));
+}
+
+public function moyasarTripCallback(Request $request)
+{
+    $request->validate([
+        'id' => 'required|string',
+        'status' => 'required|string',
+        'transaction_id' => 'required|exists:transactions,id',
+    ]);
+
+    $transaction = Transaction::findOrFail($request->transaction_id);
+
+    $response = Http::withBasicAuth(config('services.moyasar.secret_key'), '')
+        ->get('https://api.moyasar.com/v1/payments/' . $request->id);
+
+    if (!$response->successful()) {
+        return sendError(__('messages.payment verification failed'));
+    }
+
+    $payment = $response->json();
+
+    if (($payment['status'] ?? null) !== 'paid') {
+        $transaction->update([
+            'status' => 'failed',
+            'response_data' => $payment,
+        ]);
+
+        return sendError(__('messages.payment failed'));
+    }
+
+    $tripId = $transaction->pay_data['trip_id'] ?? null;
+    $trip = Trip::with('report', 'driver')->findOrFail($tripId);
+
+    $transaction->update([
+        'status' => 'paid',
+       
+        'response_data' => $payment,
+    ]);
+
+    $trip->report()->update([
+        'payment_method' => 'moyasar',
+        'is_paid' => 1,
+        'accepted_time' => null,
+    ]);
+
+    event(new ClientPayTripEvent($trip));
+
+    $trip->driver?->notify(new FcmNotification(
+        $trip->driver?->sendableTokens,
+        [
+            'ar' => __("messages.you_have_new_notification", [], 'ar'),
+            'en' => __("messages.you_have_new_notification", [], 'en')
+        ],
+        [
+            'ar' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'ar'),
+            'en' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'en')
+        ],
+        FCMTopic::DRIVER_TRIP_BOOKED,
+        FCMAction::DRIVER_OPEN_PREVIOUS_TRIPS,
+        $trip->id,
+    ));
+
+    return sendResponse(__('messages.trip is paid'));
+}
     public function notifyDrivers($driver, $trip): void
     {
 

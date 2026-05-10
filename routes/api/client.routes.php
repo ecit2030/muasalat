@@ -8,6 +8,14 @@ use App\Http\Controllers\Api\Client\FrequencyTransmissionController;
 use App\Http\Controllers\Api\Screen\Sidebar\SettingController;
 use Illuminate\Support\Facades\Route;
 
+//moyaser callback
+Route::get('/trips/{transaction}/moyasar/payment', [TripV2Controller::class, 'moyasarTripPage'])
+    ->withoutMiddleware(['auth:sanctum', 'role:user'])
+    ->name('moyasar.trip.page');
+
+Route::get('/payment/moyasar/callback', [TripV2Controller::class, 'moyasarTripCallback'])
+    ->withoutMiddleware(['auth:sanctum', 'role:user'])
+    ->name('payment.moyasar.callback');
 
 Route::name("client.")->middleware("role:user")->prefix("client")->group(function () {
 

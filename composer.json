@@ -27,7 +27,7 @@
     "cviebrock/eloquent-sluggable": "^9.0.0",
     "fruitcake/laravel-cors": "^2.0",
     "google/apiclient": "^2.17",
-    "guzzlehttp/guzzle": "^7.0.1",
+    "guzzlehttp/guzzle": "^7.10",
     "h4cc/wkhtmltoimage-amd64": "0.12.x",
     "h4cc/wkhtmltopdf-amd64": "0.12.x",
     "jackiedo/cart": "^3.0",
