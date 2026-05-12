@@ -622,20 +622,20 @@ public function moyasarTripCallback(Request $request)
 
     event(new ClientPayTripEvent($trip));
 
-    $trip->driver?->notify(new FcmNotification(
-        $trip->driver?->sendableTokens,
-        [
-            'ar' => __("messages.you_have_new_notification", [], 'ar'),
-            'en' => __("messages.you_have_new_notification", [], 'en')
-        ],
-        [
-            'ar' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'ar'),
-            'en' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'en')
-        ],
-        FCMTopic::DRIVER_TRIP_BOOKED,
-        FCMAction::DRIVER_OPEN_PREVIOUS_TRIPS,
-        $trip->id,
-    ));
+    // $trip->driver?->notify(new FcmNotification(
+    //     $trip->driver?->sendableTokens,
+    //     [
+    //         'ar' => __("messages.you_have_new_notification", [], 'ar'),
+    //         'en' => __("messages.you_have_new_notification", [], 'en')
+    //     ],
+    //     [
+    //         'ar' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'ar'),
+    //         'en' => __("messages.client pay trip :trip", ['trip' => $trip->id], 'en')
+    //     ],
+    //     FCMTopic::DRIVER_TRIP_BOOKED,
+    //     FCMAction::DRIVER_OPEN_PREVIOUS_TRIPS,
+    //     $trip->id,
+    // ));
 
     return sendResponse(__('messages.trip is paid'));
 }
