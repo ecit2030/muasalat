@@ -233,74 +233,175 @@ class TripV2Controller extends ApiController
         return sendResponse(NewTripResource::make($trip), __("messages.resource_created"));
     }
 
-    public function search(Trip $trip)
-    {
-        $closestDrivers = (new DriversActions())->nearestDrivers($trip->origin['lat'], $trip->origin['lng'], $trip);
-        $distance = (new DriversActions())->calcDistance(
-            $trip->origin['lat'],
-            $trip->origin['lng'],
-            $trip->destination['lat'],
-            $trip->destination['lng'],
-        );
+    // public function search(Trip $trip)
+    // {
+    //     $closestDrivers = (new DriversActions())->nearestDrivers($trip->origin['lat'], $trip->origin['lng'], $trip);
+    //     $distance = (new DriversActions())->calcDistance(
+    //         $trip->origin['lat'],
+    //         $trip->origin['lng'],
+    //         $trip->destination['lat'],
+    //         $trip->destination['lng'],
+    //     );
 
-        $closestDrivers->map(function ($driver) use ($distance, $trip) {
+    //     $closestDrivers->map(function ($driver) use ($distance, $trip) {
 
-            $driverUnfinishedTripsCountInSameDate = $driver->driverTrips?->where("date", $trip->date)
-                ->whereNotNull('start_at')->whereNull('end_at')->count();
-            $validCapacity = $driver->driverVehicle?->year?->model?->capacity;
+    //         $driverUnfinishedTripsCountInSameDate = $driver->driverTrips?->where("date", $trip->date)
+    //             ->whereNotNull('start_at')->whereNull('end_at')->count();
+    //         $validCapacity = $driver->driverVehicle?->year?->model?->capacity;
 
-            $distance['distance'] = $distance['distance'] < 1 ? 1 : $distance['distance'];
+    //         $distance['distance'] = $distance['distance'] < 1 ? 1 : $distance['distance'];
 
-            $kmPrice = $driver?->driverOrg ? $driver?->driverOrg?->other_price : $driver?->other_price;
-            $subtotal = $distance['distance'] * $kmPrice;
-            $taxPercentage = (float)setting('general', "tax", 14);
+    //         $kmPrice = $driver?->driverOrg ? $driver?->driverOrg?->other_price : $driver?->other_price;
+    //         $subtotal = $distance['distance'] * $kmPrice;
+    //         $taxPercentage = (float)setting('general', "tax", 14);
 
-            $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
-            $driver->validSeats = $validCapacity - $driverUnfinishedTripsCountInSameDate;
-        });
+    //         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
+    //         $driver->validSeats = $validCapacity - $driverUnfinishedTripsCountInSameDate;
+    //     });
 
-        $availableDrivers = $closestDrivers->filter(function ($driver) use ($trip) {
-            foreach (
-                $driver->driverTrips()->where('parent_id', 0)
-                    ->whereNull('start_at')
-                    ->whereNull('end_at')
-                    ->orderByDesc('created_at')->get() as $driverTrip
-            ) {
-                if ($driverTrip->date !== $trip->date) {
-                    continue;
-                }
+    //     $availableDrivers = $closestDrivers->filter(function ($driver) use ($trip) {
+    //         foreach (
+    //             $driver->driverTrips()->where('parent_id', 0)
+    //                 ->whereNull('start_at')
+    //                 ->whereNull('end_at')
+    //                 ->orderByDesc('created_at')->get() as $driverTrip
+    //         ) {
+    //             if ($driverTrip->date !== $trip->date) {
+    //                 continue;
+    //             }
 
-                // Calculate start and end times for the existing trip
-                $existingTripStartTime = \Carbon\Carbon::parse($driverTrip->time);
-                $existingTripEndTime = $existingTripStartTime->copy()->addMinutes($driverTrip->report->duration)->format('H:i');
+    //             // Calculate start and end times for the existing trip
+    //             $existingTripStartTime = \Carbon\Carbon::parse($driverTrip->time);
+    //             $existingTripEndTime = $existingTripStartTime->copy()->addMinutes($driverTrip->report->duration)->format('H:i');
 
 
 
-                // Calculate start and end times for the new trip
-                $newTripStartTime = \Carbon\Carbon::parse($trip->time)->format('H:i');
-                // $newTripEndTime = $newTripStartTime->copy()->addMinutes($trip->report->duration); // Assuming `duration` for new trip is in the report
+    //             // Calculate start and end times for the new trip
+    //             $newTripStartTime = \Carbon\Carbon::parse($trip->time)->format('H:i');
+    //             // $newTripEndTime = $newTripStartTime->copy()->addMinutes($trip->report->duration); // Assuming `duration` for new trip is in the report
 
-                // // Check for time overlap
-                // 11:40
-                // 11:40 - 11:50
+    //             // // Check for time overlap
+    //             // 11:40
+    //             // 11:40 - 11:50
 
-                // 11:40 >= 11:40 && 11:40 <= 11:50
-                if (
-                    ($newTripStartTime >= $existingTripStartTime->format('H:i') && $newTripStartTime <= $existingTripEndTime)
-                ) {
-                    if ($driverTrip->is_canceled == 0 && $trip->date == $driverTrip->date) {
-                        // There's an overlap, so this driver is not available
-                        return false;
-                    }
-                }
+    //             // 11:40 >= 11:40 && 11:40 <= 11:50
+    //             if (
+    //                 ($newTripStartTime >= $existingTripStartTime->format('H:i') && $newTripStartTime <= $existingTripEndTime)
+    //             ) {
+    //                 if ($driverTrip->is_canceled == 0 && $trip->date == $driverTrip->date) {
+    //                     // There's an overlap, so this driver is not available
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //         return true;
+    //     });
+
+
+    //     return sendResponse(CaptainModelResource::collection($availableDrivers->load(['driverTrips'])));
+    // }
+public function search(Trip $trip)
+{
+    $closestDrivers = (new DriversActions())->nearestDrivers(
+        $trip->origin['lat'],
+        $trip->origin['lng'],
+        $trip
+    );
+
+    $distance = (new DriversActions())->calcDistance(
+        $trip->origin['lat'],
+        $trip->origin['lng'],
+        $trip->destination['lat'],
+        $trip->destination['lng'],
+    );
+
+    // تجهيز بيانات السائقين
+    $closestDrivers->map(function ($driver) use ($distance, $trip) {
+
+        $driverUnfinishedTripsCountInSameDate = $driver->driverTrips()
+            ->where("date", $trip->date)
+            ->whereNull('end_at')
+            ->count();
+
+        $validCapacity = $driver->driverVehicle?->year?->model?->capacity ?? 0;
+
+        $distanceValue = $distance['distance'] < 1 ? 1 : $distance['distance'];
+
+        $kmPrice = $driver?->driverOrg
+            ? $driver?->driverOrg?->other_price
+            : $driver?->other_price;
+
+        $subtotal = $distanceValue * $kmPrice;
+
+        $taxPercentage = (float) setting('general', "tax", 14);
+
+        $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
+
+        $driver->validSeats = $validCapacity - $driverUnfinishedTripsCountInSameDate;
+    });
+
+    // فلترة السائقين المتاحين
+    $availableDrivers = $closestDrivers->filter(function ($driver) use ($trip) {
+
+        // لو لا يوجد مقاعد متاحة
+        if ($driver->validSeats <= 0) {
+            return false;
+        }
+
+        $driverTrips = $driver->driverTrips()
+            ->where('parent_id', 0)
+            ->where('date', $trip->date)
+            ->whereNull('end_at')
+            ->orderByDesc('created_at')
+            ->get();
+
+        foreach ($driverTrips as $driverTrip) {
+
+            // تجاهل الرحلات الملغية
+            if ($driverTrip->is_canceled == 1) {
+                continue;
             }
-            return true;
-        });
 
+            // وقت بداية الرحلة الحالية
+            $existingStart = \Carbon\Carbon::parse($driverTrip->time);
 
-        return sendResponse(CaptainModelResource::collection($availableDrivers->load(['driverTrips'])));
-    }
+            // وقت نهاية الرحلة الحالية
+            $existingEnd = $existingStart->copy()
+                ->addMinutes($driverTrip->report?->duration ?? 0);
 
+            // وقت بداية الرحلة الجديدة
+            $newStart = \Carbon\Carbon::parse($trip->time);
+
+            // وقت نهاية الرحلة الجديدة
+            $newEnd = $newStart->copy()
+                ->addMinutes($trip->report?->duration ?? 0);
+
+            /*
+             * التحقق من تداخل الوقت
+             *
+             * الحالة:
+             * الرحلة الجديدة تبدأ قبل نهاية القديمة
+             * AND
+             * الرحلة الجديدة تنتهي بعد بداية القديمة
+             */
+            $hasOverlap =
+                $newStart < $existingEnd &&
+                $newEnd > $existingStart;
+
+            if ($hasOverlap) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    return sendResponse(
+        CaptainModelResource::collection(
+            $availableDrivers->load(['driverTrips'])
+        )
+    );
+}
     public function sendDriverOffer(Trip $trip, User $driver)
     {
         $driverUnfinishedTripsCountInSameDate = $driver->driverTrips()->where("date", $trip->date)
