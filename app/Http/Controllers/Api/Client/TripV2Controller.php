@@ -343,7 +343,20 @@ public function search(Trip $trip)
 
         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
         $driver->validSeats = $validSeats;
+$driver = User::with([
+    'driverVehicle',
+    'driverVehicleYear',
+    'driverVehicleYear.model',
+])->find(9);
 
+dd([
+    'driver_id' => $driver->id,
+    'driverVehicle' => $driver->driverVehicle,
+    'vehicle_year_id_from_vehicle' => $driver->driverVehicle?->vehicle_year_id,
+    'driverVehicleYear' => $driver->driverVehicleYear,
+    'model' => $driver->driverVehicleYear?->model,
+    'capacity' => $driver->driverVehicleYear?->model?->capacity,
+]);
         $driverDebug = [
             'driver_id' => $driver->id,
             'capacity' => $capacity,
