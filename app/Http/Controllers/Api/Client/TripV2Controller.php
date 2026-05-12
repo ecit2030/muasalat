@@ -222,13 +222,13 @@ class TripV2Controller extends ApiController
 
             // dd('a');
             # Create Chat
-            $this->createTripChat($trip);
+           // $this->createTripChat($trip);
         }
 
         DB::commit();
 
         # NOTIFY CLIENT
-       // $this->notifyClients($request, $trip);
+        $this->notifyClients($request, $trip);
 
         return sendResponse(NewTripResource::make($trip), __("messages.resource_created"));
     }
