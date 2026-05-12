@@ -228,7 +228,7 @@ class TripV2Controller extends ApiController
         DB::commit();
 
         # NOTIFY CLIENT
-        $this->notifyClients($request, $trip);
+        //$this->notifyClients($request, $trip);
 
         return sendResponse(NewTripResource::make($trip), __("messages.resource_created"));
     }
