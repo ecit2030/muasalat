@@ -326,10 +326,8 @@ public function search(Trip $trip)
             ->whereNull('end_at')
             ->count();
 
-        $capacity =
-            $driver->driverVehicle?->capacity
-            ?? $driver->driverVehicle?->year?->model?->capacity
-            ?? 0;
+        // نفس مسار الـ Resource
+        $capacity = $driver->driverVehicleYear?->model?->capacity ?? 0;
 
         $validSeats = $capacity - $unfinishedTripsCount;
 
@@ -339,9 +337,9 @@ public function search(Trip $trip)
             ? $driver->driverOrg?->other_price
             : $driver->other_price;
 
-        $taxPercentage = (float) setting('general', 'tax', 14);
-
         $subtotal = $distanceValue * ($kmPrice ?? 0);
+
+        $taxPercentage = (float) setting('general', 'tax', 14);
 
         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
         $driver->validSeats = $validSeats;
@@ -376,10 +374,12 @@ public function search(Trip $trip)
             }
 
             $existingStart = \Carbon\Carbon::parse($driverTrip->time);
+
             $existingEnd = $existingStart->copy()
                 ->addMinutes($driverTrip->report?->duration ?? 0);
 
             $newStart = \Carbon\Carbon::parse($trip->time);
+
             $newEnd = $newStart->copy()
                 ->addMinutes($trip->report?->duration ?? 0);
 
