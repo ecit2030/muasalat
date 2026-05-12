@@ -317,18 +317,23 @@ public function search(Trip $trip)
         $trip->destination['lng'],
     );
 
-    $availableDrivers = $closestDrivers->filter(function ($driver) use ($distance, $trip) {
+    $debug = [];
+
+    $availableDrivers = $closestDrivers->filter(function ($driver) use ($distance, $trip, &$debug) {
 
         $unfinishedTripsCount = $driver->driverTrips()
             ->where('date', $trip->date)
             ->whereNull('end_at')
             ->count();
 
+        // التصحيح النهائي
         $capacity = $driver->vehicleYear?->model?->capacity ?? 0;
 
         $validSeats = $capacity - $unfinishedTripsCount;
 
-        $distanceValue = $distance['distance'] < 1 ? 1 : $distance['distance'];
+        $distanceValue = $distance['distance'] < 1
+            ? 1
+            : $distance['distance'];
 
         $kmPrice = $driver->driverOrg
             ? $driver->driverOrg?->other_price
@@ -339,9 +344,27 @@ public function search(Trip $trip)
         $taxPercentage = (float) setting('general', 'tax', 14);
 
         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
+
         $driver->validSeats = $validSeats;
 
+        $driverDebug = [
+            'driver_id' => $driver->id,
+            'capacity' => $capacity,
+            'unfinished_trips' => $unfinishedTripsCount,
+            'validSeats' => $validSeats,
+            'kmPrice' => $kmPrice,
+            'tripTotal' => $driver->tripTotal,
+            'removed_reason' => null,
+        ];
+
+        // لا يوجد مقاعد
         if ($validSeats <= 0) {
+
+            $driverDebug['removed_reason'] =
+                'No valid seats / capacity is zero or all seats reserved';
+
+            $debug[] = $driverDebug;
+
             return false;
         }
 
@@ -354,6 +377,7 @@ public function search(Trip $trip)
 
         foreach ($driverTrips as $driverTrip) {
 
+            // تجاهل الملغي
             if ($driverTrip->is_canceled == 1) {
                 continue;
             }
@@ -373,9 +397,33 @@ public function search(Trip $trip)
                 $newEnd > $existingStart;
 
             if ($hasOverlap) {
+
+                $driverDebug['removed_reason'] =
+                    'Time overlap with another trip';
+
+                $driverDebug['existing_trip_id'] = $driverTrip->id;
+
+                $driverDebug['existing_start'] =
+                    $existingStart->format('H:i');
+
+                $driverDebug['existing_end'] =
+                    $existingEnd->format('H:i');
+
+                $driverDebug['new_start'] =
+                    $newStart->format('H:i');
+
+                $driverDebug['new_end'] =
+                    $newEnd->format('H:i');
+
+                $debug[] = $driverDebug;
+
                 return false;
             }
         }
+
+        $driverDebug['removed_reason'] = 'Available';
+
+        $debug[] = $driverDebug;
 
         return true;
 
@@ -387,10 +435,11 @@ public function search(Trip $trip)
         'vehicle',
         'driverOrg',
     ]);
-
-    return sendResponse(
-        CaptainModelResource::collection($availableDrivers)
-    );
+    return response()->json([
+        'success' => true,
+       
+        'data' => CaptainModelResource::collection($availableDrivers),
+    ]);
 }
 
     public function sendDriverOffer(Trip $trip, User $driver)
