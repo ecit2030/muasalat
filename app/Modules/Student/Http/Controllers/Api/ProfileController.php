@@ -59,12 +59,32 @@ class ProfileController extends ApiController
         return $this->successResponse($code, __('messages.code_sent_successfully'));
     }
 
-    public function toggleActivation()
-    {
-        auth()->user()->update(['is_online' => !auth()->user()?->is_online]);
-        return $this->successResponse(auth()->user(), __('messages.done successfully'));
-    }
+    // public function toggleActivation()
+    // {
+    //     auth()->user()->update(['is_online' => !auth()->user()?->is_online]);
 
+    //     return $this->successResponse(auth()->user(), __('messages.done successfully'));
+    // }
+public function toggleActivation(Request $request)
+{
+    $request->validate([
+        'latitude' => 'required',
+        'longitude' => 'required',
+    ]);
+
+    $user = auth()->user();
+
+    $user->update([
+        'is_online' => !$user->is_online,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+    ]);
+
+    return $this->successResponse(
+        $user,
+        __('messages.done successfully')
+    );
+}
 
     public function editProfile(UpdateProfileRequest $request)
     {
