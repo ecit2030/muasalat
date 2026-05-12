@@ -76,7 +76,7 @@ public function toggleActivation(Request $request)
         $user = auth()->user();
 
         $user->update([
-            'is_online' => !$user->is_online,
+            'is_online' => !auth()->user()?->is_online,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
