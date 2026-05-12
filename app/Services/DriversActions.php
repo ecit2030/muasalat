@@ -10,38 +10,64 @@ use Illuminate\Support\Facades\Http;
 
 class DriversActions
 {
-    public function nearestDrivers($tripStartLat, $tripStartLong,$trip = null): Collection|array
-    {
-        return User::query()
-            ->select(DB::raw('*, ( 6371 * acos( cos( radians(' . $tripStartLat . ') ) * cos( radians( `latitude` ) ) * cos(radians( `longitude` ) - radians(' . $tripStartLong . ') ) + sin( radians(' . $tripStartLat . ') ) * sin( radians( `latitude` ) ) ) ) as distance'))
-            // ->whereHas('roles', function ($query) {
-            //     $query->where('name', 'captain');
-            // })
-           // ->whereHas('deviceTokens')
-            // ->where(function($q){
-            //     $q->where('other_price','>',0)
-            //     ->orWhereHas('driverOrg',function($q){
-            //         $q->where('other_price','>',0);
-            //     });
-            // })
-            ->whereNotNull('latitude')
-            ->whereNotNull('longitude')
-            // ->whereDoesntHave('driverTrips', function (Builder $builder) use($trip){
-            //     $builder->where(function($q) use($trip){
-            //         $q->where("date",$trip->date)
-            //         // ->where('is_canceled', 0)
-            //         ->whereHas('report', function ($q) {
-            //             $q->where('is_paid', 1);
-            //         });
-            //     });
-            // })
-           // ->where('is_active', 1)
-            ->where('is_online', 1)
-           // ->having('distance', '<=', setting('general', 'searchRange', 5))
-           // ->orderBy('distance', 'ASC')
-            ->get();
-    }
-
+    // public function nearestDrivers($tripStartLat, $tripStartLong,$trip = null): Collection|array
+    // {
+    //     return User::query()
+    //         ->select(DB::raw('*, ( 6371 * acos( cos( radians(' . $tripStartLat . ') ) * cos( radians( `latitude` ) ) * cos(radians( `longitude` ) - radians(' . $tripStartLong . ') ) + sin( radians(' . $tripStartLat . ') ) * sin( radians( `latitude` ) ) ) ) as distance'))
+    //         ->whereHas('roles', function ($query) {
+    //             $query->where('name', 'captain');
+    //         })
+    //         ->whereHas('deviceTokens')
+    //         ->where(function($q){
+    //             $q->where('other_price','>',0)
+    //             ->orWhereHas('driverOrg',function($q){
+    //                 $q->where('other_price','>',0);
+    //             });
+    //         })
+    //         ->whereNotNull('latitude')
+    //         ->whereNotNull('longitude')
+    //         // ->whereDoesntHave('driverTrips', function (Builder $builder) use($trip){
+    //         //     $builder->where(function($q) use($trip){
+    //         //         $q->where("date",$trip->date)
+    //         //         // ->where('is_canceled', 0)
+    //         //         ->whereHas('report', function ($q) {
+    //         //             $q->where('is_paid', 1);
+    //         //         });
+    //         //     });
+    //         // })
+    //         ->where('is_active', 1)
+    //         ->where('is_online', 1)
+    //         ->having('distance', '<=', setting('general', 'searchRange', 5))
+    //         ->orderBy('distance', 'ASC')
+    //         ->get();
+    // }
+public function nearestDrivers($tripStartLat, $tripStartLong, $trip = null): Collection|array
+{
+    return User::query()
+        ->with([
+            'driverVehicle',
+            'driverVehicleYear',
+            'driverVehicleYear.model',
+            'driverTrips.report',
+            'driverOrg',
+        ])
+        ->select(DB::raw('
+            *,
+            (
+                6371 * acos(
+                    cos(radians(' . $tripStartLat . '))
+                    * cos(radians(latitude))
+                    * cos(radians(longitude) - radians(' . $tripStartLong . '))
+                    + sin(radians(' . $tripStartLat . '))
+                    * sin(radians(latitude))
+                )
+            ) as distance
+        '))
+        ->whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->where('is_online', 1)
+        ->get();
+}
     public function allActiveDrivers(): Collection|array
     {
         return User::query()

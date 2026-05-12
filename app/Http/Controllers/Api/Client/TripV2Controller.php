@@ -327,7 +327,7 @@ public function search(Trip $trip)
             ->count();
 
         // نفس مسار الـ Resource
-        $capacity = $driver->driverVehicleYear?->model?->capacity ?? 0;
+       $capacity = $driver->driverVehicleYear?->model?->capacity ?? 0;
 
         $validSeats = $capacity - $unfinishedTripsCount;
 
