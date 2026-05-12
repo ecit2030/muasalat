@@ -437,7 +437,9 @@ public function search(Trip $trip)
     ]);
     return response()->json([
         'success' => true,
-       
+        'closestDriversCount' => $closestDrivers->count(),
+        'availableDriversCount' => $availableDrivers->count(),
+        'debug' => $debug,
         'data' => CaptainModelResource::collection($availableDrivers),
     ]);
 }
