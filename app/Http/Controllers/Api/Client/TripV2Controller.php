@@ -435,7 +435,6 @@ public function search(Trip $trip)
         'vehicle',
         'driverOrg',
     ]);
-return sendResponse(CaptainModelResource::collection($availableDrivers->load(['driverTrips'])));
     return response()->json([
         'success' => true,
         'closestDriversCount' => $closestDrivers->count(),
