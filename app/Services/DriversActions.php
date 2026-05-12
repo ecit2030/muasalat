@@ -14,10 +14,10 @@ class DriversActions
     {
         return User::query()
             ->select(DB::raw('*, ( 6371 * acos( cos( radians(' . $tripStartLat . ') ) * cos( radians( `latitude` ) ) * cos(radians( `longitude` ) - radians(' . $tripStartLong . ') ) + sin( radians(' . $tripStartLat . ') ) * sin( radians( `latitude` ) ) ) ) as distance'))
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'captain');
-            })
-            ->whereHas('deviceTokens')
+            // ->whereHas('roles', function ($query) {
+            //     $query->where('name', 'captain');
+            // })
+           // ->whereHas('deviceTokens')
             ->where(function($q){
                 $q->where('other_price','>',0)
                 ->orWhereHas('driverOrg',function($q){
@@ -35,10 +35,10 @@ class DriversActions
             //         });
             //     });
             // })
-            ->where('is_active', 1)
+           // ->where('is_active', 1)
             ->where('is_online', 1)
-            ->having('distance', '<=', setting('general', 'searchRange', 5))
-            ->orderBy('distance', 'ASC')
+           // ->having('distance', '<=', setting('general', 'searchRange', 5))
+           // ->orderBy('distance', 'ASC')
             ->get();
     }
 
