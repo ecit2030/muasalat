@@ -200,18 +200,96 @@ class NewTripController extends ApiController
     /**
      * @throws \Throwable
      */
-    public function acceptTrip(Trip $trip)
-    {
+    // public function acceptTrip(Trip $trip)
+    // {
+    //     $offer = $trip->driverTripOffers()
+    //         ->where('driver_id', auth()->id())
+    //         ->where('status', 'pending')
+    //         ->first();
+    //     if (!$offer) {
+    //         return sendError(__("messages.there is no offer for this driver on this trip"));
+    //     }
+    //     DB::beginTransaction();
+    //     $offer->update(['status' => 'accepted']);
+    //     $trip->update(['driver_id' => auth()->id()]);
+
+    //     $distance = (new DriversActions())->calcDistance(
+    //         $trip->origin['lat'],
+    //         $trip->origin['lng'],
+    //         $trip->destination['lat'],
+    //         $trip->destination['lng'],
+    //     );
+    //     $distance['distance'] = $distance['distance'] < 1 ? 1 : $distance['distance'];
+
+    //     $kmPrice = auth()->user()?->driverOrg ? auth()->user()?->driverOrg?->other_price : auth()->user()?->other_price;
+    //     $subtotal = $distance['distance'] * $kmPrice;
+    //     $taxPercentage = (double)setting('general', "tax", 14);
+    //     $general = setting('general');
+    //     $appPercentage = +data_get($general, "appPercentage");
+
+    //     $trip->report()?->update([
+    //         'total_km' => $distance['distance'],
+    //         "sub_total" => $subtotal,
+    //         "tax_value" => ($subtotal * $taxPercentage) / 100,
+    //         "app_commission" => ($subtotal * $appPercentage) / 100,
+    //         "tax" => $taxPercentage,
+    //         "total" => $subtotal + (($subtotal * $taxPercentage) / 100),
+    //         "km_price" => $kmPrice,
+    //         "accepted_time" => now()->format('Y-m-d H:i:s'),
+    //     ]);
+
+    //     $trip->chat()->updateOrCreate([
+    //         'trip_id' => $trip->id
+    //     ], [
+    //         'receiver_id' => auth()->id()
+    //     ]);
+
+    //     DB::commit();
+
+    //     $trip->client?->notify(new FcmNotification(
+    //         $trip->client?->sendableTokens,
+    //         ['ar' => __("messages.you_have_new_notification", [], 'ar'),
+    //             'en' => __("messages.you_have_new_notification", [], 'en')],
+    //         ['ar' => __("messages.trip :trip accepted by captain :captain", ['trip' => $trip->id, 'captain' => auth()->user()?->name], 'ar'),
+    //             'en' => __("messages.trip :trip accepted by captain :captain", ['trip' => $trip->id, 'captain' => auth()->user()?->name], 'en')],
+    //         FCMTopic::DRIVER_ACCEPT_TRIP,
+    //         FCMAction::DRIVER_OPEN_UPCOMING_TRIPS,
+    //         $trip->id,
+    //     ));
+
+    //     return sendResponse(__("messages.trip accepted successfully"));
+    // }
+
+public function acceptTrip(Trip $trip)
+{
+    try {
+        DB::beginTransaction();
+
         $offer = $trip->driverTripOffers()
             ->where('driver_id', auth()->id())
             ->where('status', 'pending')
+            ->lockForUpdate()
             ->first();
+
         if (!$offer) {
+            DB::rollBack();
+
             return sendError(__("messages.there is no offer for this driver on this trip"));
         }
-        DB::beginTransaction();
-        $offer->update(['status' => 'accepted']);
-        $trip->update(['driver_id' => auth()->id()]);
+
+        if ($trip->driver_id && $trip->driver_id != auth()->id()) {
+            DB::rollBack();
+
+            return sendError(__("messages.trip already accepted by another driver"));
+        }
+
+        $offer->update([
+            'status' => 'accepted',
+        ]);
+
+        $trip->update([
+            'driver_id' => auth()->id(),
+        ]);
 
         $distance = (new DriversActions())->calcDistance(
             $trip->origin['lat'],
@@ -219,16 +297,25 @@ class NewTripController extends ApiController
             $trip->destination['lat'],
             $trip->destination['lng'],
         );
-        $distance['distance'] = $distance['distance'] < 1 ? 1 : $distance['distance'];
 
-        $kmPrice = auth()->user()?->driverOrg ? auth()->user()?->driverOrg?->other_price : auth()->user()?->other_price;
-        $subtotal = $distance['distance'] * $kmPrice;
-        $taxPercentage = (double)setting('general', "tax", 14);
+        $distanceValue = $distance['distance'] < 1 ? 1 : $distance['distance'];
+
+        $kmPrice = auth()->user()?->driverOrg
+            ? auth()->user()?->driverOrg?->other_price
+            : auth()->user()?->other_price;
+
+        $kmPrice = $kmPrice ?? 0;
+
+        $subtotal = $distanceValue * $kmPrice;
+
+        $taxPercentage = (double) setting('general', "tax", 14);
+
         $general = setting('general');
-        $appPercentage = +data_get($general, "appPercentage");
+
+        $appPercentage = (double) data_get($general, "appPercentage", 0);
 
         $trip->report()?->update([
-            'total_km' => $distance['distance'],
+            'total_km' => $distanceValue,
             "sub_total" => $subtotal,
             "tax_value" => ($subtotal * $taxPercentage) / 100,
             "app_commission" => ($subtotal * $appPercentage) / 100,
@@ -239,28 +326,47 @@ class NewTripController extends ApiController
         ]);
 
         $trip->chat()->updateOrCreate([
-            'trip_id' => $trip->id
+            'trip_id' => $trip->id,
         ], [
-            'receiver_id' => auth()->id()
+            'receiver_id' => auth()->id(),
         ]);
 
         DB::commit();
 
         $trip->client?->notify(new FcmNotification(
             $trip->client?->sendableTokens,
-            ['ar' => __("messages.you_have_new_notification", [], 'ar'),
-                'en' => __("messages.you_have_new_notification", [], 'en')],
-            ['ar' => __("messages.trip :trip accepted by captain :captain", ['trip' => $trip->id, 'captain' => auth()->user()?->name], 'ar'),
-                'en' => __("messages.trip :trip accepted by captain :captain", ['trip' => $trip->id, 'captain' => auth()->user()?->name], 'en')],
+            [
+                'ar' => __("messages.you_have_new_notification", [], 'ar'),
+                'en' => __("messages.you_have_new_notification", [], 'en'),
+            ],
+            [
+                'ar' => __("messages.trip :trip accepted by captain :captain", [
+                    'trip' => $trip->id,
+                    'captain' => auth()->user()?->name,
+                ], 'ar'),
+                'en' => __("messages.trip :trip accepted by captain :captain", [
+                    'trip' => $trip->id,
+                    'captain' => auth()->user()?->name,
+                ], 'en'),
+            ],
             FCMTopic::DRIVER_ACCEPT_TRIP,
             FCMAction::DRIVER_OPEN_UPCOMING_TRIPS,
             $trip->id,
         ));
 
         return sendResponse(__("messages.trip accepted successfully"));
+
+    } catch (\Throwable $e) {
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+        ], 500);
     }
-
-
+}
     public function rejectTrip(Trip $trip)
     {
         if ($trip->report?->reservation_type == 'other') {
