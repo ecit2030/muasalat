@@ -326,12 +326,14 @@ public function search(Trip $trip)
             ->whereNull('end_at')
             ->count();
 
-        // نفس مسار الـ Resource
-       $capacity = $driver->driverVehicleYear?->model?->capacity ?? 0;
+        // التصحيح النهائي
+        $capacity = $driver->vehicleYear?->model?->capacity ?? 0;
 
         $validSeats = $capacity - $unfinishedTripsCount;
 
-        $distanceValue = $distance['distance'] < 1 ? 1 : $distance['distance'];
+        $distanceValue = $distance['distance'] < 1
+            ? 1
+            : $distance['distance'];
 
         $kmPrice = $driver->driverOrg
             ? $driver->driverOrg?->other_price
@@ -342,21 +344,9 @@ public function search(Trip $trip)
         $taxPercentage = (float) setting('general', 'tax', 14);
 
         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
-        $driver->validSeats = $validSeats;
-$driver = User::with([
-    'driverVehicle',
-    'driverVehicleYear',
-    'driverVehicleYear.model',
-])->find(9);
 
-dd([
-    'driver_id' => $driver->id,
-    'driverVehicle' => $driver->driverVehicle,
-    'vehicle_year_id_from_vehicle' => $driver->driverVehicle?->vehicle_year_id,
-    'driverVehicleYear' => $driver->driverVehicleYear,
-    'model' => $driver->driverVehicleYear?->model,
-    'capacity' => $driver->driverVehicleYear?->model?->capacity,
-]);
+        $driver->validSeats = $validSeats;
+
         $driverDebug = [
             'driver_id' => $driver->id,
             'capacity' => $capacity,
@@ -367,9 +357,14 @@ dd([
             'removed_reason' => null,
         ];
 
+        // لا يوجد مقاعد
         if ($validSeats <= 0) {
-            $driverDebug['removed_reason'] = 'No valid seats / capacity is zero or all seats reserved';
+
+            $driverDebug['removed_reason'] =
+                'No valid seats / capacity is zero or all seats reserved';
+
             $debug[] = $driverDebug;
+
             return false;
         }
 
@@ -382,6 +377,7 @@ dd([
 
         foreach ($driverTrips as $driverTrip) {
 
+            // تجاهل الملغي
             if ($driverTrip->is_canceled == 1) {
                 continue;
             }
@@ -396,29 +392,49 @@ dd([
             $newEnd = $newStart->copy()
                 ->addMinutes($trip->report?->duration ?? 0);
 
-            $hasOverlap = $newStart < $existingEnd && $newEnd > $existingStart;
+            $hasOverlap =
+                $newStart < $existingEnd &&
+                $newEnd > $existingStart;
 
             if ($hasOverlap) {
-                $driverDebug['removed_reason'] = 'Time overlap with another trip';
+
+                $driverDebug['removed_reason'] =
+                    'Time overlap with another trip';
+
                 $driverDebug['existing_trip_id'] = $driverTrip->id;
-                $driverDebug['existing_start'] = $existingStart->format('H:i');
-                $driverDebug['existing_end'] = $existingEnd->format('H:i');
-                $driverDebug['new_start'] = $newStart->format('H:i');
-                $driverDebug['new_end'] = $newEnd->format('H:i');
+
+                $driverDebug['existing_start'] =
+                    $existingStart->format('H:i');
+
+                $driverDebug['existing_end'] =
+                    $existingEnd->format('H:i');
+
+                $driverDebug['new_start'] =
+                    $newStart->format('H:i');
+
+                $driverDebug['new_end'] =
+                    $newEnd->format('H:i');
 
                 $debug[] = $driverDebug;
+
                 return false;
             }
         }
 
         $driverDebug['removed_reason'] = 'Available';
+
         $debug[] = $driverDebug;
 
         return true;
 
     })->values();
 
-    $availableDrivers->load(['driverTrips']);
+    $availableDrivers->load([
+        'driverTrips',
+        'vehicleYear.model',
+        'vehicle',
+        'driverOrg',
+    ]);
 
     return response()->json([
         'success' => true,

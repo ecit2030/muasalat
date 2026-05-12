@@ -45,9 +45,8 @@ public function nearestDrivers($tripStartLat, $tripStartLong, $trip = null): Col
 {
     return User::query()
         ->with([
-            'driverVehicle',
-            'driverVehicleYear',
-            'driverVehicleYear.model',
+            'vehicle',
+            'vehicleYear.model',
             'driverTrips.report',
             'driverOrg',
         ])
@@ -63,9 +62,13 @@ public function nearestDrivers($tripStartLat, $tripStartLong, $trip = null): Col
                 )
             ) as distance
         '))
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'captain');
+        })
         ->whereNotNull('latitude')
         ->whereNotNull('longitude')
         ->where('is_online', 1)
+        ->where('is_active', 1)
         ->get();
 }
     public function allActiveDrivers(): Collection|array
