@@ -20,7 +20,7 @@ use Modules\Student\Transformers\Auth\CaptainModelResource;
 use Modules\Student\Transformers\Auth\DriverModelResource;
 use Modules\Student\Transformers\Auth\UserModelResource;
 use Modules\Student\Transformers\StudentResource;
-
+use Illuminate\Http\Request;
 
 class ProfileController extends ApiController
 {
@@ -66,25 +66,26 @@ class ProfileController extends ApiController
     //     return $this->successResponse(auth()->user(), __('messages.done successfully'));
     // }
 public function toggleActivation(Request $request)
-{
-    $request->validate([
-        'latitude' => 'required',
-        'longitude' => 'required',
-    ]);
+    {
 
-    $user = auth()->user();
+        $request->validate([
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ]);
 
-    $user->update([
-        'is_online' => !$user->is_online,
-        'latitude' => $request->latitude,
-        'longitude' => $request->longitude,
-    ]);
+        $user = auth()->user();
 
-    return $this->successResponse(
-        $user,
-        __('messages.done successfully')
-    );
-}
+        $user->update([
+            'is_online' => !$user->is_online,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return $this->successResponse(
+            $user,
+            __('messages.done successfully')
+        );
+    }
 
     public function editProfile(UpdateProfileRequest $request)
     {
