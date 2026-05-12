@@ -18,12 +18,12 @@ class DriversActions
             //     $query->where('name', 'captain');
             // })
            // ->whereHas('deviceTokens')
-            ->where(function($q){
-                $q->where('other_price','>',0)
-                ->orWhereHas('driverOrg',function($q){
-                    $q->where('other_price','>',0);
-                });
-            })
+            // ->where(function($q){
+            //     $q->where('other_price','>',0)
+            //     ->orWhereHas('driverOrg',function($q){
+            //         $q->where('other_price','>',0);
+            //     });
+            // })
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             // ->whereDoesntHave('driverTrips', function (Builder $builder) use($trip){
