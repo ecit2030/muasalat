@@ -57,6 +57,21 @@
                         <x-component.input :col_size="6" :value="$driver" :label="t_('driver')" />
                         <x-component.input :col_size="6" :value="$vehicle" :label="t_('vehicle')" />
                     </div>
+
+                    <div class="row mt-3">
+                        <x-component.input
+                            :col_size="6"
+                            name="oneway_price"
+                            type="text"
+                            :value="$model->oneway_price"
+                            :label="t_('oneway_price')" />
+                        <x-component.input
+                            :col_size="6"
+                            name="round_price"
+                            type="text"
+                            :value="$model->round_price"
+                            :label="t_('round_price')" />
+                    </div>
                     
                     <div class="mt-3">
                         <x-component.input

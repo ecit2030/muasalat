@@ -40,7 +40,10 @@ class StoreFrequencyTransmissionRequest extends FormRequest
             'status_driver' => 'nullable|in:0,1,2',
 
             'map_route_data' => 'nullable',
-            'details' => 'nullable'
+            'details' => 'nullable',
+
+            'oneway_price' => 'nullable|numeric|min:0',
+            'round_price' => 'nullable|numeric|min:0',
         ];
     }
 

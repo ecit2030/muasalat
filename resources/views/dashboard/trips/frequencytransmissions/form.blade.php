@@ -90,6 +90,28 @@
     </div>
     <div class="row">
         <div class="form-group mt-3 col-6">
+            <x-form.input
+                name="oneway_price"
+                type="number"
+                step="0.01"
+                min="0"
+                value="{{ $data['oneway_price'] ?? null }}"
+                :label="t_('oneway_price')"
+            />
+        </div>
+        <div class="form-group mt-3 col-6">
+            <x-form.input
+                name="round_price"
+                type="number"
+                step="0.01"
+                min="0"
+                value="{{ $data['round_price'] ?? null }}"
+                :label="t_('round_price')"
+            />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group mt-3 col-6">
             {{-- Driver --}}
             <x-form.select 
                 name="driver_id" 

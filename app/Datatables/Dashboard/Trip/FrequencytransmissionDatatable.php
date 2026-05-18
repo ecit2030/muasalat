@@ -93,6 +93,18 @@ class FrequencyTransmissionDatatable extends BaseDatatable
                 ]);
             },
 
+            'oneway_price' => function ($model) {
+                return view('components.datatable.includes.columns.title', [
+                    "title" => $model->oneway_price ?? '--'
+                ]);
+            },
+
+            'round_price' => function ($model) {
+                return view('components.datatable.includes.columns.title', [
+                    "title" => $model->round_price ?? '--'
+                ]);
+            },
+
             'status_driver' => function ($model) {
                 return match ($model->status_driver) {
                     1 => '<span class="badge bg-success">Accepted</span>',
@@ -117,6 +129,8 @@ class FrequencyTransmissionDatatable extends BaseDatatable
             Column::computed('origin')->title('Start Point'),
             Column::computed('destination')->title('End Point'),
             Column::computed('date_trans')->title('Date'),
+            Column::computed('oneway_price')->title('One Way Price'),
+            Column::computed('round_price')->title('Round Price'),
             Column::computed('status_driver')->title('Driver Status'),
             Column::computed('is_active')->title('Active'),
         ];

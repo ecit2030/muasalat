@@ -321,6 +321,8 @@
     "Change Driver": "تغيير السائق",
     "map_route_data": "المسار (Route)",
     "details": "تفاصيل إضافية",
+    "oneway_price": "سعر الذهاب",
+    "round_price": "سعر الذهاب والعودة",
     "clients selected trips": "الرحلات المختارة من قبل العملاء",
     "back": "العودة",
     "color": "اللون",

@@ -30,6 +30,8 @@ class FrequencyTransmission extends Model
         'date_trans',
         'status_driver',
         'details',
+        'oneway_price',
+        'round_price',
         'is_active',
         'created_by',
         'updated_by',
@@ -40,6 +42,8 @@ class FrequencyTransmission extends Model
             'destination' => 'array',
             'repeat' => 'array',
             'map_route_data' => 'array',
+            'oneway_price' => 'decimal:2',
+            'round_price' => 'decimal:2',
         ];
 
 
