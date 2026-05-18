@@ -76,5 +76,47 @@ class FrequencyTransmissionController extends ApiController
             ->apiInfo('captain frequency transmissions decide success')
             ->apiResponse();
     }
+
+    public function completed_trip(Request $request, FrequencyTransmission $frequencyTransmission)
+    {
+        if ($frequencyTransmission->driver_id !== auth()->id()) {
+            return $this->apiCode(403)
+                ->apiBody([])
+                ->apiMessage(t_("you dont have permisssion to access this resource"))
+                ->apiInfo('captain frequency transmissions forbidden')
+                ->apiResponse();
+        }
+
+        // Prevent completing already finished trip
+        if ($frequencyTransmission->is_active == 2) {
+            return $this->apiCode(400)
+                ->apiBody([])
+                ->apiMessage(t_("trip already completed"))
+                ->apiInfo('captain frequency transmission already completed')
+                ->apiResponse();
+        }
+
+        // active trips (is_active = 1) can become completed (is_active = 2).
+        if ($frequencyTransmission->is_active != 1) {
+            return $this->apiCode(400)
+                ->apiBody([])
+                ->apiMessage(t_("trip is not active"))
+                ->apiInfo('invalid trip state')
+                ->apiResponse();
+        }
+        
+        $frequencyTransmission->update([
+            'is_active' => 2,
+            'updated_by' => auth()->id(),
+        ]);
+
+        return $this->apiCode(200)
+            ->apiBody([
+                'data' => new FrequencyTransmissionResource($frequencyTransmission->fresh()),
+            ])
+            ->apiMessage('')
+            ->apiInfo('captain frequency transmissions completed success')
+            ->apiResponse();
+    }
 }
 

@@ -34,5 +34,6 @@ Route::name("captain.")->middleware("role:captain")->prefix("captain")->group(fu
     // Frequency Transmissions
     Route::get("frequency-transmissions", [FrequencyTransmissionController::class, "index"]);
     Route::patch("frequency-transmissions/{frequencyTransmission}/decide", [FrequencyTransmissionController::class, "decide"]);
+    Route::patch("frequency-transmissions/{frequencyTransmission}/completed_trip", [FrequencyTransmissionController::class, "completed_trip"]);
 });
 
