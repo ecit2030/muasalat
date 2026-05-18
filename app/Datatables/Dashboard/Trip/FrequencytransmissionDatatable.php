@@ -43,7 +43,7 @@ class FrequencyTransmissionDatatable extends BaseDatatable
 
         $data = match ($status) {
             // finished/completed
-            'completed', 'finished' => $data->where('is_active', 0),
+            'completed', 'finished' => $data->where('is_active', 2),
 
             // driver waiting / refused
             'driver_waiting', 'waiting', 'pending' => $data->where('status_driver', 0),
