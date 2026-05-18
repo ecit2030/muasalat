@@ -20,6 +20,10 @@ class FrequencyTransmissionResource extends JsonResource
             'date_trans' => optional($this->date_trans)->toDateTimeString() ?? $this->date_trans,
             'status_driver' => (int) $this->status_driver,
             'is_active' => (bool) $this->is_active,
+            'distance_km' => $this->when(
+                isset($this->distance_km),
+                fn () => round((float) $this->distance_km, 2)
+            ),
         ];
     }
 }

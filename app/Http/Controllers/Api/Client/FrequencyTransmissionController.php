@@ -9,7 +9,6 @@ use App\Models\Report;
 use App\Models\Trip;
 use App\Services\DriversActions;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,107 +18,42 @@ class FrequencyTransmissionController extends ApiController
      * Flow step 1.3: show available frequency trips after client sets pickup location.
      *
      * Query params:
-     * - origin_lat, origin_lng: optional, to filter by nearest (range from setting general.searchRange)
-    
-    public function index(Request $request)
-    {
-        $request->validate([
-            'origin_lat' => 'nullable|numeric',
-            'origin_lng' => 'nullable|numeric',
-        ]);
-
-        $radiusInKM = setting('general', 'searchRange', 5);
-
-        $query = FrequencyTransmission::query()
-            ->where('is_active', 1)
-            ->where('status_driver', 1)
-            ->latest('id');
-
-        if ($request->filled('origin_lat') && $request->filled('origin_lng')) {
-            $lat = (float) $request->origin_lat;
-            $lng = (float) $request->origin_lng;
-
-            // Filter by distance from the frequency transmission origin (stored as JSON: $.lat, $.lng)
-            $query->where(function (Builder $builder) use ($lat, $lng, $radiusInKM) {
-                $builder->whereRaw("
-                    6371 * acos(
-                        cos(radians(?)) * cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7)))) *
-                        cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lng')) AS DECIMAL(10, 7))) - radians(?)) +
-                        sin(radians(?)) * sin(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7))))
-                    ) <= ?
-                ", [
-                    $lat,
-                    $lng,
-                    $lat,
-                    $radiusInKM,
-                ]);
-            });
-        }
-
-        return sendResponse(FrequencyTransmissionResource::collection($query->get()));
-    }
+     * - origin_lat, origin_lng: optional, sort trips from nearest to farthest pickup point
      */
     public function index(Request $request)
     {
         $request->validate([
             'origin_lat' => 'nullable|numeric',
             'origin_lng' => 'nullable|numeric',
-            'destination_lat' => 'nullable|numeric',
-            'destination_lng' => 'nullable|numeric',
         ]);
-
-        $radiusInKM = setting('general', 'searchRange', 5);
 
         $query = FrequencyTransmission::query()
             ->where('is_active', 1)
-            ->where('status_driver', 1)
-            ->latest('id');
+            ->where('status_driver', 1);
 
-        $originLat = $request->origin_lat;
-        $originLng = $request->origin_lng;
+        if ($request->filled('origin_lat') && $request->filled('origin_lng')) {
+            $lat = (float) $request->origin_lat;
+            $lng = (float) $request->origin_lng;
 
-        $destinationLat = $request->destination_lat;
-        $destinationLng = $request->destination_lng;
-
-        $query->where(function (Builder $builder) use (
-            $originLat, $originLng,
-            $destinationLat, $destinationLng,
-            $radiusInKM
-        ) {
-
-            // 📍 فلترة origin (إذا موجودة)
-            if (!is_null($originLat) && !is_null($originLng)) {
-                $builder->whereRaw("
-                    6371 * acos(
+            $distanceExpression = "
+                6371 * acos(
+                    LEAST(1, GREATEST(-1,
                         cos(radians(?)) * cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7)))) *
                         cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lng')) AS DECIMAL(10, 7))) - radians(?)) +
                         sin(radians(?)) * sin(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(origin, '$.lat')) AS DECIMAL(10, 7))))
-                    ) <= ?
-                ", [
-                    $originLat,
-                    $originLng,
-                    $originLat,
-                    $radiusInKM,
-                ]);
-            }
+                    ))
+                )
+            ";
 
-            // 📍 فلترة destination (إذا موجودة)
-            if (!is_null($destinationLat) && !is_null($destinationLng)) {
-                $builder->whereRaw("
-                    6371 * acos(
-                        cos(radians(?)) * cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lat')) AS DECIMAL(10, 7)))) *
-                        cos(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lng')) AS DECIMAL(10, 7))) - radians(?)) +
-                        sin(radians(?)) * sin(radians(CAST(JSON_UNQUOTE(JSON_EXTRACT(destination, '$.lat')) AS DECIMAL(10, 7))))
-                    ) <= ?
-                ", [
-                    $destinationLat,
-                    $destinationLng,
-                    $destinationLat,
-                    $radiusInKM,
-                ]);
-            }
-
-        });
+            $query
+                ->selectRaw("frequency_transmissions.*, ({$distanceExpression}) AS distance_km", [$lat, $lng, $lat])
+                ->whereNotNull('origin')
+                ->whereRaw("JSON_EXTRACT(origin, '$.lat') IS NOT NULL")
+                ->whereRaw("JSON_EXTRACT(origin, '$.lng') IS NOT NULL")
+                ->orderBy('distance_km');
+        } else {
+            $query->latest('id');
+        }
 
         return sendResponse(
             FrequencyTransmissionResource::collection($query->get())
