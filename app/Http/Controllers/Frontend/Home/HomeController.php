@@ -99,7 +99,8 @@ class HomeController extends FrontendController
 
     public function landing(Request $request)
     {
-        $staticpages = StaticPage::all();
+        //$staticpages = StaticPage::all();
+        $staticpages = StaticPage::orderBy('id', 'asc')->take(3)->get();
 
         return view("Site.index", get_defined_vars());
     }
@@ -116,7 +117,8 @@ class HomeController extends FrontendController
 
         if ($validator->fails()) {
             $errorss = $validator->errors()->all();
-            $staticpages = StaticPage::all();
+            //$staticpages = StaticPage::all();
+            $staticpages = StaticPage::orderBy('id', 'asc')->take(3)->get();
             return view("Site.index", get_defined_vars());
         };
 
