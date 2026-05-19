@@ -18,7 +18,7 @@
             <li class="nav-item active">
 
                 @php
-                    $staticpages = Modules\StaticPage\Entities\StaticPage::all();
+                    $staticpages = StaticPage::orderBy('id', 'asc')->take(3)->get();
                 @endphp
 
                 @foreach ($staticpages as $staticpage)
