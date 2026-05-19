@@ -198,7 +198,9 @@ class Sidebar
     public function trip()
     {
         $adminList = [
-            SidebarLink::to(t_('trips index'), route('dashboard.trips.trips.index')),
+            SidebarLink::to(t_('all trips'), route('dashboard.trips.trips.index')),
+            SidebarLink::to(t_('mashwar trips'), route('dashboard.trips.trips.mashwar')),
+            SidebarLink::to(t_('subscription trips'), route('dashboard.trips.trips.monthly-subscription')),
            // SidebarLink::to(t_('trips by track index'), route('dashboard.trips.trips.indextrack')),
         ];
 

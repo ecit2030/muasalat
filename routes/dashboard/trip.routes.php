@@ -8,6 +8,8 @@ Route::get('trips/exporttrip/{trip}',[TripController::class,'exportTrip'])->name
 Route::get('trips/by-track',[TripController::class,'indexTrack'])->name('trips.trips.indextrack');
 Route::get('trips/by-track/pdf',[TripController::class,'generateTrackPDF'])->name('trips.trips.trackpdf');
 Route::get('trips/by-track/show/{id}',[TripController::class,'showTrack'])->name('trips.trips.showtrack');
+Route::get('trips/mashwar', [TripController::class, 'indexMashwar'])->name('trips.trips.mashwar');
+Route::get('trips/monthly-subscription', [TripController::class, 'indexMonthlySubscription'])->name('trips.trips.monthly-subscription');
 Route::name("trips")->resource("trips", TripController::class);
 
 

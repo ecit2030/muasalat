@@ -13,28 +13,9 @@ class TripDatatable extends BaseDatatable
 
     public function query(): Builder
     {
-        $moderator = auth()->user()->hasRole("moderator");
-        $organization = auth()->user()->hasRole("organization");
-        $admin = auth()->user()->hasRole("admin");
+        $data = $this->baseTripsQuery();
 
-        if ($admin) {
-            $data = Trip::query()->orderByDesc("created_at");
-        } elseif ($organization) {
-            $data = Trip::query()->orderByDesc("created_at")
-                ->whereHas("driver", function ($q) {
-                    $q->whereHas('driverOrg', function ($q) {
-                        $q->where('id', auth()->id());
-                    });
-                });
-        } elseif ($moderator) {
-            $data = Trip::query()->orderByDesc("created_at")
-                ->whereHas("driver", function ($q) {
-                    $q->whereHas('driverOrg', function ($q) {
-                        $q->where('organization_id', auth()->user()->organization_id);
-                    });
-                });
-        }
-        // Exclude frequency bookings from the main Trips page
+        // Exclude frequency bookings from the main Trips pages
         $data->where(function ($q) {
             $q->whereNull('trip_type')
                 ->orWhere('trip_type', '!=', 'frequency');
@@ -42,7 +23,46 @@ class TripDatatable extends BaseDatatable
             $qr->where('reservation_type', 'frequency');
         });
 
-        return $data->orderBy('id','DESC');
+        $this->filterByReservationType($data);
+
+        return $data->orderBy('id', 'DESC');
+    }
+
+    /**
+     * Override in subclasses to limit by reports.reservation_type.
+     * Default: all non-frequency trips (previous dashboard behaviour).
+     */
+    protected function filterByReservationType(Builder $data): void
+    {
+    }
+
+    protected function baseTripsQuery(): Builder
+    {
+        $moderator = auth()->user()->hasRole("moderator");
+        $organization = auth()->user()->hasRole("organization");
+        $admin = auth()->user()->hasRole("admin");
+
+        if ($admin) {
+            return Trip::query()->orderByDesc("created_at");
+        }
+        if ($organization) {
+            return Trip::query()->orderByDesc("created_at")
+                ->whereHas("driver", function ($q) {
+                    $q->whereHas('driverOrg', function ($q) {
+                        $q->where('id', auth()->id());
+                    });
+                });
+        }
+        if ($moderator) {
+            return Trip::query()->orderByDesc("created_at")
+                ->whereHas("driver", function ($q) {
+                    $q->whereHas('driverOrg', function ($q) {
+                        $q->where('organization_id', auth()->user()->organization_id);
+                    });
+                });
+        }
+
+        return Trip::query()->orderByDesc("created_at")->whereRaw('1 = 0');
     }
 
 

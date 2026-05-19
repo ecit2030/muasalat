@@ -51,6 +51,11 @@
     "all invoices": "All Invoices",
     "export excel": "Export Excel",
     "other": "Trip",
-    "talebat": "Monthly Subscrption"
+    "talebat": "Monthly Subscrption",
+    "regular trips": "Regular trips (one-off)",
+    "monthly subscription trips": "Monthly subscription trips (talebat)",
+    "all trips": "All trips",
+    "mashwar trips": "Mashwar trips (one-off)",
+    "subscription trips": "Subscription trips"
 
 }

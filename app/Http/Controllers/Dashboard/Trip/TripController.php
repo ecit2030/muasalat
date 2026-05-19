@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard\Trip;
 
+use App\Datatables\Dashboard\Trip\OtherTripDatatable;
+use App\Datatables\Dashboard\Trip\TalebatTripDatatable;
 use App\Datatables\Dashboard\Trip\TripByTrackDatatable;
 use App\Datatables\Dashboard\Trip\TripDatatable;
 use App\Exports\TripExport;
@@ -39,6 +41,27 @@ class TripController extends DashboardController
             'route' => $this->routeName,
             'currentLanguage' => get_current_lang(),
             'title' => "",
+            'pageTitle' => t_('all trips'),
+        ]);
+    }
+
+    public function indexMashwar()
+    {
+        return OtherTripDatatable::create($this->viewPath)->render("{$this->viewPath}.index", [
+            'route' => $this->routeName,
+            'currentLanguage' => get_current_lang(),
+            'title' => "",
+            'pageTitle' => t_('mashwar trips'),
+        ]);
+    }
+
+    public function indexMonthlySubscription()
+    {
+        return TalebatTripDatatable::create($this->viewPath)->render("{$this->viewPath}.index", [
+            'route' => $this->routeName,
+            'currentLanguage' => get_current_lang(),
+            'title' => "",
+            'pageTitle' => t_('subscription trips'),
         ]);
     }
 
