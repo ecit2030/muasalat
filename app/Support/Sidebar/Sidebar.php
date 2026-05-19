@@ -24,7 +24,9 @@ class Sidebar
            // $generator->addModule(t_('driver'), 'icon-home')->push($this->driver());
           //  $generator->addModule(t_('track'), 'icon-home')->push($this->track());
             $generator->addModule(t_('frequencytransmission'), 'icon-home')->push($this->frequencytransmission());
-            $generator->addModule(t_('trip'), 'icon-home')->push($this->trip());            
+           // $generator->addModule(t_('trip'), 'icon-home')->push($this->trip()); 
+            $generator->addModule(t_('trips_mashwar'), 'icon-home')->push($this->trips_mashwar()); 
+            $generator->addModule(t_('trips_subscription'), 'icon-home')->push($this->trips_subscription());    
             $generator->addModule(t_('chats'), 'icon-rocketchat')->push($this->chats());
             $generator->addModule(t_('notification'), 'icon-home')->push($this->notification());
             $generator->addModule(t_('wallet'), 'icon-home')->push($this->wallet());
@@ -199,13 +201,37 @@ class Sidebar
     {
         $adminList = [
             SidebarLink::to(t_('all trips'), route('dashboard.trips.trips.index')),
-            SidebarLink::to(t_('mashwar trips'), route('dashboard.trips.trips.mashwar')),
-            SidebarLink::to(t_('subscription trips'), route('dashboard.trips.trips.monthly-subscription')),
+          //  SidebarLink::to(t_('mashwar trips'), route('dashboard.trips.trips.mashwar')),
+          //  SidebarLink::to(t_('subscription trips'), route('dashboard.trips.trips.monthly-subscription')),
            // SidebarLink::to(t_('trips by track index'), route('dashboard.trips.trips.indextrack')),
         ];
 
         return [
             SidebarMenu::create(t_('trips manage'), 'las la-map', permission: 'view_trip')
+                ->push($adminList),
+        ];
+    }
+
+    public function trips_mashwar()
+    {
+         $adminList = [
+            SidebarLink::to(t_('mashwar trips'), route('dashboard.trips.trips.mashwar')),
+        ];
+
+        return [
+            SidebarMenu::create(t_('mashwar trips'), 'las la-map', permission: 'view_trip')
+                ->push($adminList),
+        ];
+    }
+
+    public function trips_subscription()
+    {
+         $adminList = [
+            SidebarLink::to(t_('subscription trips'), route('dashboard.trips.trips.monthly-subscription')),
+        ];
+
+        return [
+            SidebarMenu::create(t_('subscription trips'), 'las la-map', permission: 'view_trip')
                 ->push($adminList),
         ];
     }
