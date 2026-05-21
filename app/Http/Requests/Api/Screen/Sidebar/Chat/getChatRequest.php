@@ -15,7 +15,8 @@ class getChatRequest extends FormRequest
     public function rules()
     {
         return [
-            'chat_id'      => 'required|exists:chats,id',
+            'chat_id'   => 'required|exists:chats,id',
+            'after_id'  => 'nullable|integer|min:1',
         ];
     }
 }

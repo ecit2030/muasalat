@@ -60,4 +60,18 @@ class ChatController extends DashboardController
 
         return response()->json(['data' => ManagementChatMessagesResource::make($message)]);
     }
+
+    public function pollMessages(Request $request, $chatId)
+    {
+        $chat = Chat::findOrFail($chatId);
+
+        $messages = $chat->messages()
+            ->when($request->filled('after_id'), fn ($q) => $q->where('id', '>', $request->after_id))
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'messages' => ManagementChatMessagesResource::collection($messages)->resolve(),
+        ]);
+    }
 }

@@ -10,5 +10,7 @@ route_group('chat', function () {
     Route::post('/reply/{chat}/{message}', [ChatController::class, "replyMessage"])
         ->name("chats.reply");
 
+    Route::get('/chats/{chat}/messages', [ChatController::class, 'pollMessages'])
+        ->name('chats.messages');
 
 });

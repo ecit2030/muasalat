@@ -93,13 +93,13 @@
                                 <div class="chat-log">
                                     @forelse($model->chat?->messages as $message)
                                         @if($message->user_id == auth('dashboard')->id())
-                                            <div class="chat-log__item chat-log__item--own">
+                                            <div class="chat-log__item chat-log__item--own" data-message-id="{{ $message->id }}">
                                                 <h3 class="chat-log__author">{{$message->created_at->format('Y-m-d')}}
                                                     <small>{{$message->created_at->format('H:i')}}</small></h3>
                                                 <div class="chat-log__message">{{$message->message}}</div>
                                             </div>
                                         @else
-                                            <div class="chat-log__item">
+                                            <div class="chat-log__item" data-message-id="{{ $message->id }}">
                                                 <h3 class="chat-log__author">{{$message->created_at->format('Y-m-d')}}
                                                     <small>{{$message->created_at->format('H:i')}}</small></h3>
                                                 <div class="chat-log__message">{{$message->message}}</div>
@@ -124,6 +124,9 @@
                                 </div>
 
                                 <input type="hidden" id="authId" value="{{auth('dashboard')->id()}}">
+                                <input type="hidden" id="chatId" value="{{ $model->chat?->id }}">
+                                <input type="hidden" id="pusherKey" value="{{ config('broadcasting.connections.pusher.key') }}">
+                                <input type="hidden" id="pusherCluster" value="{{ env('PUSHER_APP_CLUSTER', 'eu') }}">
                             </div>
                         </div>
                     </div>
@@ -136,62 +139,119 @@
     <x-slot name="scripts">
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script>
+            (function () {
+                const authId = $('#authId').val();
+                const chatId = $('#chatId').val();
+                const pollUrl = '{{ route('dashboard.chat.chats.messages', $model->chat?->id) }}';
+                const replyUrl = '{{ route('dashboard.chat.chats.reply', [$model->chat?->id, $model->id]) }}';
+                const csrfToken = '{{ csrf_token() }}';
+                const displayedIds = new Set();
 
-            document.addEventListener('DOMContentLoaded', function () {
-                $('.chat-log').animate({
-                    scrollTop: $('.chat-log').prop("scrollHeight")
-                }, 500);
-
-                var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-                    cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-                    encrypted: true
-                });
-                var channel = pusher.subscribe('chat.{{ $model->chat?->id }}');
-                channel.bind('App\\Events\\ChatEvent', function(data) {
-                    let chatLog = $('.chat-log')
-                    if($('#authId').val() != data.message.user_id){
-                        chatLog.append(`
-                               <div class="chat-log__item">
-                                    <h3 class="chat-log__author">${data.message.messageDate}
-                                        <small>${data.message.messageTime}</small></h3>
-                                    <div class="chat-log__message">${data.message.message}</div>
-                                </div>`);
-                        $('.chat-log').animate({
-                            scrollTop: $('.chat-log').prop("scrollHeight")
-                        }, 500);
-                    }
-                });
-            });
-
-            $(document).ready(function () {
-                $('.sendMessageButton').on('click', function () {
-                $(this).hide();
-                    let message = $('#sendMessageInput').val()
-                    $.ajax({
-                        url: '{{route('dashboard.chat.chats.reply',[$model->chat?->id,$model->id])}}',
-                        type: "POST",
-                        data: {message:message},
-                        dataType: "JSON",
-                        success: function (res) {
-                            let chatLog = $('.chat-log')
-                            chatLog.append(`
-                                <div class="chat-log__item chat-log__item--own">
-                                    <h3 class="chat-log__author">{{now()->format('Y-m-d')}}
-                                    <small>{{now()->format('H:i')}}</small></h3>
-                                    <div class="chat-log__message">${message}</div>
-                                </div>`);
-                            $('.chat-log').animate({
-                                scrollTop: $('.chat-log').prop("scrollHeight")
-                            }, 500);
-
-                            $('#sendMessageInput').val('')
-                            $('.sendMessageButton').show();
-                        },
-                        error: function (res) {
-                        $('.sendMessageButton').show();}
+                function getLastMessageId() {
+                    let lastId = 0;
+                    $('.chat-log [data-message-id]').each(function () {
+                        const id = parseInt($(this).attr('data-message-id'), 10);
+                        if (id > lastId) lastId = id;
                     });
-                })
-            })
+                    return lastId;
+                }
+
+                function scrollChatToBottom() {
+                    const chatLog = $('.chat-log');
+                    chatLog.animate({ scrollTop: chatLog.prop('scrollHeight') }, 300);
+                }
+
+                function escapeHtml(text) {
+                    return $('<div>').text(text).html();
+                }
+
+                function appendMessage(msg, isOwn) {
+                    if (!msg || !msg.id || displayedIds.has(msg.id)) return;
+                    displayedIds.add(msg.id);
+
+                    const ownClass = isOwn ? ' chat-log__item--own' : '';
+                    const html = `
+                        <div class="chat-log__item${ownClass}" data-message-id="${msg.id}">
+                            <h3 class="chat-log__author">${escapeHtml(msg.messageDate || '')}
+                                <small>${escapeHtml(msg.messageTime || '')}</small></h3>
+                            <div class="chat-log__message">${escapeHtml(msg.message || '')}</div>
+                        </div>`;
+                    $('.chat-log').append(html);
+                    scrollChatToBottom();
+                }
+
+                function handleIncomingMessage(msg) {
+                    if (!msg || !msg.id) return;
+                    const isOwn = String(msg.user_id) === String(authId);
+                    appendMessage(msg, isOwn);
+                }
+
+                function pollNewMessages() {
+                    if (!chatId) return;
+                    $.get(pollUrl, { after_id: getLastMessageId() }, function (res) {
+                        (res.messages || []).forEach(function (msg) {
+                            handleIncomingMessage(msg);
+                        });
+                    });
+                }
+
+                function sendMessage() {
+                    const input = $('#sendMessageInput');
+                    const message = input.val().trim();
+                    const button = $('.sendMessageButton');
+                    if (!message) return;
+
+                    button.prop('disabled', true);
+                    $.ajax({
+                        url: replyUrl,
+                        type: 'POST',
+                        data: { message: message, _token: csrfToken },
+                        dataType: 'JSON',
+                        success: function (res) {
+                            handleIncomingMessage(res.data);
+                            input.val('');
+                        },
+                        complete: function () {
+                            button.prop('disabled', false);
+                        }
+                    });
+                }
+
+                function initPusher() {
+                    const pusherKey = $('#pusherKey').val();
+                    const pusherCluster = $('#pusherCluster').val();
+                    if (!pusherKey || !chatId || typeof Pusher === 'undefined') return;
+
+                    const pusher = new Pusher(pusherKey, {
+                        cluster: pusherCluster,
+                        encrypted: true
+                    });
+                    const channel = pusher.subscribe('chat.' + chatId);
+                    channel.bind('App\\Events\\ChatEvent', function (data) {
+                        if (data && data.message) {
+                            handleIncomingMessage(data.message);
+                        }
+                    });
+                }
+
+                $(document).ready(function () {
+                    $('.chat-log [data-message-id]').each(function () {
+                        displayedIds.add(parseInt($(this).attr('data-message-id'), 10));
+                    });
+
+                    scrollChatToBottom();
+                    initPusher();
+                    setInterval(pollNewMessages, 4000);
+
+                    $('.sendMessageButton').on('click', sendMessage);
+                    $('#sendMessageInput').on('keydown', function (e) {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            sendMessage();
+                        }
+                    });
+                });
+            })();
         </script>
     </x-slot>
 

@@ -13,6 +13,7 @@ class ManagementChatMessagesResource extends JsonResource
     {
         $isSenderMe = auth('sanctum')->id() == $this->user_id ? "true" : "false";
         return [
+            "id"  => $this->id,
             "message"  => $this->message ?? '',
             "readAt"  => $this->read_at ?? '',
             "isRead"  => $this->read_at ? "true" : "false",

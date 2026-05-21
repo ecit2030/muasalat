@@ -98,10 +98,12 @@ class SettingController extends ApiController
 //        })->first();
 
 //        if ($chat) {
-        $chat->messages()->create([
+        $message = $chat->messages()->create([
             "message" => $request->message,
             "user_id" => auth()->id(),
         ]);
+
+        event(new ChatEvent($chat->id, ManagementChatMessagesResource::make($message)));
 //        } else {
 //            $chat = Chat::create(["sender_id" => auth()->id(), "receiver_id" => $request->receiver_id]);
 //            $chat->messages()->create([
@@ -138,7 +140,10 @@ class SettingController extends ApiController
     public function getChat(getChatRequest $request)
     {
         $chat = Chat::findOrFail($request->chat_id);
-        $messages = $chat->messages()->orderBy("created_at", "ASC")->get();
+        $messages = $chat->messages()
+            ->when($request->filled('after_id'), fn ($q) => $q->where('id', '>', $request->after_id))
+            ->orderBy("created_at", "ASC")
+            ->get();
         $chat->messages()->whereNull("read_at")
             ->where("user_id", "!=", auth()->id())
             ->update(["read_at" => Carbon::now()]);
@@ -194,9 +199,12 @@ class SettingController extends ApiController
         return sendResponse(ManagementChatMessagesResource::make($message));
     }
 
-    public function getAdminChatMessages(Chat $chat)
+    public function getAdminChatMessages(Chat $chat, Request $request)
     {
-        $messages = $chat->messages()->orderBy("created_at", "DESC")->get();
+        $messages = $chat->messages()
+            ->when($request->filled('after_id'), fn ($q) => $q->where('id', '>', $request->after_id))
+            ->orderBy("created_at", "DESC")
+            ->get();
         $chat->messages()->whereNull("read_at")
             ->where("user_id", "!=", auth()->id())
             ->update(["read_at" => Carbon::now()]);
