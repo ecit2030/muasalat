@@ -388,8 +388,19 @@ public function acceptTrip(Trip $trip)
 
             /**
              * ✅ 3. Get NEXT captain (only one)
-             */
+              
             $nextDriver = User::where('role', 'captain')
+                ->where('id', '!=', $driverId) 
+                ->whereDoesntHave('driverTripOffers', function ($q) use ($trip) {
+                    $q->where('trip_id', $trip->id)
+                      ->where('status', 'rejected');
+                }) 
+                ->where('is_available', 1) 
+                ->first(); 
+            */
+
+
+            $nextDriver = User::role('captain')
                 ->where('id', '!=', $driverId)
 
                 // 🚫 exclude drivers who already rejected THIS trip
@@ -399,7 +410,7 @@ public function acceptTrip(Trip $trip)
                 })
 
                 // 🟢 optional filters
-                ->where('is_available', 1)
+                ->where('is_active', 1)
 
                 ->first(); // 👈 ONLY ONE captain
 

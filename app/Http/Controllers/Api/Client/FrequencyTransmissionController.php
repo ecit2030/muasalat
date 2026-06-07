@@ -45,12 +45,20 @@ class FrequencyTransmissionController extends ApiController
                 )
             ";
 
+            /*
+                $query
+                    ->selectRaw("frequency_transmissions.*, ({$distanceExpression}) AS distance_km", [$lat, $lng, $lat])
+                    ->whereNotNull('origin')
+                    ->whereRaw("JSON_EXTRACT(origin, '$.lat') IS NOT NULL")
+                    ->whereRaw("JSON_EXTRACT(origin, '$.lng') IS NOT NULL")
+                    ->orderBy('distance_km');
+            */
+
             $query
                 ->selectRaw("frequency_transmissions.*, ({$distanceExpression}) AS distance_km", [$lat, $lng, $lat])
-                ->whereNotNull('origin')
-                ->whereRaw("JSON_EXTRACT(origin, '$.lat') IS NOT NULL")
-                ->whereRaw("JSON_EXTRACT(origin, '$.lng') IS NOT NULL")
+                ->orderByRaw('distance_km IS NULL')
                 ->orderBy('distance_km');
+                
         } else {
             $query->latest('id');
         }

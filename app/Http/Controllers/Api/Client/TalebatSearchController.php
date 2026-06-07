@@ -183,7 +183,8 @@ class TalebatSearchController extends ApiController
                                 if ($dayExistsInTrack) {
                                     foreach ($dates as $date) {
                                         $occupaiedCapacity = Trip::whereTrackId($track->id)->where("date", $date)->whereNull('end_at')->count();
-                                        $vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        //$vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        $vehicleCapacity = $track->vehicle?->year?->model?->capacity ?? 0;
                                         if ($vehicleCapacity > $occupaiedCapacity) {
                                             $clientTrack["date"] = $date;
                                             $goingTrips[$date] = $clientTrack;
@@ -224,7 +225,8 @@ class TalebatSearchController extends ApiController
                                 if ($dayExistsInTrack) {
                                     foreach ($dates as $date) {
                                         $occupaiedCapacity = Trip::whereTrackId($track->id)->where("date", $date)->whereNull('end_at')->count();
-                                        $vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        //$vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        $vehicleCapacity = $track->vehicle?->year?->model?->capacity ?? 0;
                                         if ($vehicleCapacity > $occupaiedCapacity) {
                                             $clientTrack["date"] = $date;
                                             $returningTrips[$date] = $clientTrack;
@@ -639,7 +641,8 @@ class TalebatSearchController extends ApiController
                                 if ($dayExistsInTrack) {
                                     foreach ($dates as $date) {
                                         $occupaiedCapacity = Trip::whereTrackId($track->id)->where("date", $date)->whereNull('end_at')->count();
-                                        $vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        //$vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        $vehicleCapacity = $track->vehicle?->year?->model?->capacity ?? 0;
                                         if ($vehicleCapacity > $occupaiedCapacity) {
                                             $clientTrack["date"] = $date;
                                             $goingTrips[$date] = $clientTrack;
@@ -675,7 +678,8 @@ class TalebatSearchController extends ApiController
                                 if ($dayExistsInTrack) {
                                     foreach ($dates as $date) {
                                         $occupaiedCapacity = Trip::whereTrackId($track->id)->where("date", $date)->whereNull('end_at')->count();
-                                        $vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        //$vehicleCapacity = $track->vehicle->year->model->capacity;
+                                        $vehicleCapacity = $track->vehicle?->year?->model?->capacity ?? 0;
                                         if ($vehicleCapacity > $occupaiedCapacity) {
                                             $clientTrack["date"] = $date;
                                             $returningTrips[$date] = $clientTrack;
