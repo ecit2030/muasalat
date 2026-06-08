@@ -49,7 +49,7 @@ class Payment
 
             // ---------- TEST MODE ----------
             // Set this to true to bypass real payment API
-            $testMode = true;
+            $testMode = false;
             if ($testMode) {
                 // Generate fake payment data
                 $res['check_id'] = 'TEST-' . \Str::uuid();
