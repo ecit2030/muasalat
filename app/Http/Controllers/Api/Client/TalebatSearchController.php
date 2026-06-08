@@ -263,6 +263,7 @@ class TalebatSearchController extends ApiController
         return sendError(__("messages.no_trips_found_at_this_time"), ["empty_search" => [__("messages.no_trips_found_at_this_time")]]);
     }
 
+    /* -- old function --
     public function store(StoreTalebatRequest $request)
     {
         # GET LIST OF TRIP DATES
@@ -296,10 +297,10 @@ class TalebatSearchController extends ApiController
         # CALCULATE PRICE
         $trips = array();
         $priceType = $request->type == "talebat" ? "talebat_price" : "other_price";
-//        foreach ($request->tracks as $track) {
+        // foreach ($request->tracks as $track) {
         $tax = data_get(setting('tax'), "tax", 14);
-//        $kmPrice = Track::whereId($track['track_id'] ?? null)->first()->owner->$priceType;
-//            $subtotal = $track['distance'] * $kmPrice;
+        // $kmPrice = Track::whereId($track['track_id'] ?? null)->first()->owner->$priceType;
+        // $subtotal = $track['distance'] * $kmPrice;
         $subtotal = 0;
         $distance = (new DriversActions())->calcDistance(
             $request->origin['lat'],
@@ -389,6 +390,185 @@ class TalebatSearchController extends ApiController
      
         return sendResponse(__("messages.resource_created"));
 
+    }
+    */
+
+    /* -- new function by neila */
+    public function store(StoreTalebatRequest $request)
+    {
+        try {
+            if (!$request->origin || !$request->destination || !is_array($request->repeat)) {
+                return sendError("Invalid request data");
+            }
+
+            $tripDates = $this->tripDates();
+            if (empty($tripDates)) {
+                return sendError(__('messages.there_is_no_days_included_in_the_date_range'));
+            }
+
+            $dates = [];
+
+            foreach (($request->repeat ?? []) as $repeat) {
+                foreach (($tripDates ?? []) as $date) {
+                    try {
+                        if (($repeat['day'] ?? null) === Carbon::parse($date)->format('l')) {
+                            $dates[] = [
+                                'date' => $date,
+                                'from' => $repeat['go'] ?? null,
+                                'to' => $repeat['return'] ?? null,
+                                'trip_type' => 'go'
+                            ];
+                        }
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+            }
+
+            $dates = collect($dates)->sortBy('date')->values()->toArray();
+
+            $backDates = [];
+
+            foreach ($dates as $date) {
+                $backDates[] = [
+                    'date' => $date['date'] ?? null,
+                    'from' => $date['to'] ?? null,
+                    'to' => $date['to'] ?? null,
+                    'trip_type' => 'return',
+                ];
+            }
+
+            $fullDates = array_merge($dates, $backDates);
+            $fullDates = collect($fullDates)->sortBy(['date', 'from'])->values()->toArray();
+
+            $trips = [];
+            $tax = data_get(setting('tax'), 'tax', 14);
+
+            $distance = (new DriversActions())->calcDistance(
+                data_get($request->origin, 'lat'),
+                data_get($request->origin, 'lng'),
+                data_get($request->destination, 'lat'),
+                data_get($request->destination, 'lng'),
+            );
+
+            $subtotal = 0;
+            $parent_id = 0;
+
+            foreach ($fullDates as $tripDate) {
+
+                if (!($tripDate['date'] ?? false)) {
+                    continue;
+                }
+
+                $newTrip = Trip::create([
+                    'client_id' => auth()->id(),
+                    'date' => Carbon::parse($tripDate['date'])->format('Y-m-d'),
+                    'time' => $tripDate['from'] ?? null,
+                    'trip_type' => $tripDate['trip_type'] ?? 'go',
+                    'origin' => $request->origin,
+                    'destination' => $request->destination,
+                    'parent_id' => $parent_id
+                ]);
+
+                if (!$parent_id) {
+                    $parent_id = $newTrip->id;
+                }
+
+                if ($newTrip) {
+                    $trips[] = $newTrip;
+                }
+            }
+
+            $report = null;
+
+            if (count($trips) > 0) {
+                $report = Report::create([
+                    "total_km" => data_get($distance, 'distance', 0),
+                    "duration" => data_get($distance, 'duration', 0),
+                    "sub_total" => $subtotal,
+                    "tax_value" => 0,
+                    "tax" => $tax,
+                    "total" => 0,
+                    "km_price" => 0,
+                    "payment_method" => 'not paid',
+                    "reservation_type" => $request->type,
+                    "start_date" => $request->start_date ?? null,
+                    "end_date" => $request->end_date ?? null,
+                    "accepted_time_for_driver" => now(),
+                ]);
+            }
+
+            foreach ($trips as $trip) {
+                if ($report) {
+                    $trip->update(['report_id' => $report->id]);
+                }
+
+                $trip->chat()->updateOrCreate(
+                    ['trip_id' => $trip->id],
+                    [
+                        'sender_id' => auth()->id(),
+                        'receiver_id' => 0
+                    ]
+                );
+            }
+
+            $user = $request->user()->load('deviceTokens');
+
+            $firstTrip = $trips[0] ?? null;
+
+            $allActiveDrivers = collect();
+
+            if ($firstTrip && is_array($firstTrip->origin ?? null)) {
+                $allActiveDrivers = (new DriversActions())->nearestDrivers(
+                    data_get($firstTrip->origin, 'lat'),
+                    data_get($firstTrip->origin, 'lng'),
+                    $firstTrip
+                );
+            }
+
+            if (count($trips) === count($fullDates) && $firstTrip) {
+
+                $user->notify(new FcmNotification(
+                    $user->sendableTokens,
+                    [
+                        'ar' => __("messages.you_have_new_notification", [], 'ar'),
+                        'en' => __("messages.you_have_new_notification", [], 'en')
+                    ],
+                    [
+                        'ar' => __("messages.you_purchased_new_trips", [], 'ar'),
+                        'en' => __("messages.you_purchased_new_trips", [], 'en')
+                    ],
+                    FCMTopic::CLIENT_TALEBAT_NEW_TRIPS,
+                    FCMAction::CLIENT_OPEN_NEW_TRIPS,
+                    $firstTrip->id,
+                ));
+
+                foreach ($allActiveDrivers as $driver) {
+                    $driver?->notify(new FcmNotification(
+                        $driver?->sendableTokens,
+                        [
+                            'ar' => __("messages.you_have_new_notification", [], 'ar'),
+                            'en' => __("messages.you_have_new_notification", [], 'en')
+                        ],
+                        [
+                            'ar' => __("messages.client_purchased_new_trips", [], 'ar'),
+                            'en' => __("messages.client_purchased_new_trips", [], 'en')
+                        ],
+                        FCMTopic::DRIVER_TRIP_BOOKED,
+                        FCMAction::DRIVER_OPEN_NEW_TRIPS,
+                        $driver->id
+                    ));
+                }
+            }
+
+            return sendResponse(__("messages.resource_created"));
+
+        } catch (\Throwable $e) {
+            return sendError("Server error", [
+                "message" => $e->getMessage(),
+                "line" => $e->getLine()
+            ]);
+        }
     }
 
     public function getRequestedDrivers(Trip $trip)
