@@ -454,6 +454,26 @@ class TalebatSearchController extends ApiController
             $subtotal = 0;
             $parent_id = 0;
 
+
+            /**
+             * PRICING (FIXED — THIS WAS YOUR BUG)
+             */
+            $taxRate = data_get(setting('tax'), 'tax', 14);
+
+            $priceType = $request->type === "talebat"
+                ? "talebat_price"
+                : "other_price";
+
+            $user = auth()->user();
+
+            $kmPrice = $user->$priceType ?? 0;
+
+            $subtotal = ($distance['distance'] ?? 0) * $kmPrice;
+
+            $taxValue = ($subtotal * $taxRate) / 100;
+            $total = $subtotal + $taxValue;
+
+
             foreach ($fullDates as $tripDate) {
 
                 if (!($tripDate['date'] ?? false)) {
@@ -486,10 +506,10 @@ class TalebatSearchController extends ApiController
                     "total_km" => data_get($distance, 'distance', 0),
                     "duration" => data_get($distance, 'duration', 0),
                     "sub_total" => $subtotal,
-                    "tax_value" => 0,
-                    "tax" => $tax,
-                    "total" => 0,
-                    "km_price" => 0,
+                    "tax_value" => $taxValue,
+                    "tax" => $taxRate,
+                    "total" => $total,
+                    "km_price" => $kmPrice,
                     "payment_method" => 'not paid',
                     "reservation_type" => $request->type,
                     "start_date" => $request->start_date ?? null,
