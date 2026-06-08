@@ -24,7 +24,7 @@ Homestead.yaml
 # Logs and debug
 npm-debug.log
 yarn-error.log
-*.lock
+#*.lock
 
 # PHP CS Fixer
 .php-cs-fixer.php
@@ -36,7 +36,7 @@ _ide_helper.php
 .phpstorm.meta.php
 
 # Composer & package files
-composer.lock
+#composer.lock
 package-lock.json
 
 # StyleCI
