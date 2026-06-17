@@ -219,8 +219,9 @@ class TripV2Controller extends ApiController
                 $taxRate = data_get(setting('tax'), 'tax', 14);
 
                 // choose price column safely
-                $priceType = "other_price";
-                $kmPrice = $user->$priceType ?? 0;
+               // $priceType = "other_price";
+               // $kmPrice = $user->$priceType ?? 0;
+                $kmPrice = data_get(setting('price'), 'other_min', 1);
 
                 // safety check
                 if ($kmPrice <= 0) {
