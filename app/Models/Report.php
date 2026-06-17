@@ -43,6 +43,15 @@ class Report extends Model implements HasMedia
         "payment_unique_id",
     ];
 
+    protected $casts = [
+        'sub_total' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'total' => 'decimal:2',
+        'km_price' => 'decimal:2',
+        'tax_value' => 'decimal:2',
+        'total_km' => 'decimal:2',
+    ];
+
 //    public function registerMediaCollections(): void
 //    {
 //        $this->addMediaCollection('receiptPDF')
