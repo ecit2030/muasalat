@@ -397,33 +397,54 @@ public function search(Trip $trip)
 
     public function sendDriverOffer(Trip $trip, User $driver)
     {
-        $driverUnfinishedTripsCountInSameDate = $driver->driverTrips()->where("date", $trip->date)
-            ->whereNotNull('start_at')->whereNull('end_at')->where('is_canceled', 0)->count();
+        try {
+            $driverUnfinishedTripsCountInSameDate = $driver->driverTrips()->where("date", $trip->date)
+                ->whereNotNull('start_at')->whereNull('end_at')->where('is_canceled', 0)->count();
 
-        $validCapacity = $driver->driverVehicle?->year?->model?->capacity;
+            $validCapacity = $driver->driverVehicle?->year?->model?->capacity;
 
-        # If No Seats Available With This Driver In Trip Date
-        // if ($validCapacity <= $driverUnfinishedTripsCountInSameDate) {
-        //     return sendResponse(__("messages.There is no seats available with this captain"));
-        // }
+            # If No Seats Available With This Driver In Trip Date
+            // if ($validCapacity <= $driverUnfinishedTripsCountInSameDate) {
+            //     return sendResponse(__("messages.There is no seats available with this captain"));
+            // }
 
-        # If Already Send Offer To The Captain
-        if ($trip->driverTripOffers()->where(['status' => 'pending'])->exists()) {
-            return sendResponse(__("messages.Trip Has Pending Request"));
+            # If Already Send Offer To The Captain
+            if ($trip->driverTripOffers()->where(['status' => 'pending'])->exists()) {
+                return sendResponse(__("messages.Trip Has Pending Request"));
+            }
+
+            $trip->report()?->update([
+                'accepted_time_for_driver' => now()->format('Y-m-d H:i:s'),
+            ]);
+
+            /*
+            $driver->driverTripOffers()?->updateOrCreate([
+                'trip_id' => $trip->id,
+                'status' => 'pending',
+            ]);
+            */
+
+                $driver->driverTripOffers()->updateOrCreate(
+                    [
+                        'trip_id' => $trip->id,
+                    ],
+                    [
+                        'status' => 'pending',
+                    ]
+                );
+
+            $this->notifyDrivers($driver, $trip);
+
+            return sendResponse(__("messages.send to the captain"));
+        } catch (\Throwable $e) {
+            logger()->error('sendDriverOffer failed', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
+
+            return sendResponse("Server error", false);
         }
-
-        $trip->report()?->update([
-            'accepted_time_for_driver' => now()->format('Y-m-d H:i:s'),
-        ]);
-
-        $driver->driverTripOffers()?->updateOrCreate([
-            'trip_id' => $trip->id,
-            'status' => 'pending',
-        ]);
-
-        $this->notifyDrivers($driver, $trip);
-
-        return sendResponse(__("messages.send to the captain"));
     }
 
     public function cancelTrip(Request $request, Trip $trip)
