@@ -204,15 +204,44 @@ class TripV2Controller extends ApiController
                 $trip->destination['lng'],
             );
             # Generate Report
+
+            /* new change remplate the 0 of new report */
+              // ✅ normalize distance
+                $distanceKm = data_get($distance, 'distance', 0);
+                $duration   = data_get($distance, 'duration', 0);
+
+                // minimum 1 km
+                $distanceKm = $distanceKm < 1 ? 1 : $distanceKm;
+
+                $user = auth()->user();
+
+                // tax setting
+                $taxRate = data_get(setting('tax'), 'tax', 14);
+
+                // choose price column safely
+                $priceType = "other_price";
+                $kmPrice = $user->$priceType ?? 0;
+
+                // safety check
+                if ($kmPrice <= 0) {
+                    throw new \Exception("Invalid KM price for user");
+                }
+
+                // calculations
+                $subtotal = $distanceKm * $kmPrice;
+                $taxValue = ($subtotal * $taxRate) / 100;
+                $total = $subtotal + $taxValue;
+            /* new change remplate the 0 of new report */
+
             $report = Report::create([
                 "total_km" => $distance["distance"] < 1 ? 1 : $distance["distance"],
                 "duration" => $distance["duration"],
-                "sub_total" => 0,
-                "tax_value" => 0,
-                "tax" => 0,
-                "total" => 0,
+                "sub_total" => $subtotal,
+                "tax_value" => $taxValue,
+                "tax" => $taxRate,
+                "total" => $total,
                 "payment_method" => 'not paid',
-                "km_price" => 0,
+                "km_price" => $kmPrice,
                 "reservation_type" => 'other',
                 "start_date" => Carbon::parse($request->date)->format('Y-m-d'),
                 "end_date" => Carbon::parse($request->date)->format('Y-m-d'),
@@ -433,7 +462,7 @@ public function search(Trip $trip)
                     ]
                 );
 
-        
+
            // $this->notifyDrivers($driver, $trip);
 
             return sendResponse(__("messages.send to the captain"));
