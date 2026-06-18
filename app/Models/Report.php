@@ -24,6 +24,7 @@ class Report extends Model implements HasMedia
 
     protected $fillable = [
         "sub_total",
+        "tax_value",
         "tax",
         "total",
         "total_km",

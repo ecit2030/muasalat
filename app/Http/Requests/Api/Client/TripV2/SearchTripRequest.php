@@ -15,10 +15,10 @@ class SearchTripRequest extends FormRequest
     public function rules()
     {
         return [
-            "origin.lat" => "required|string|max:100",
-            "origin.lng" => "required|string|max:100",
-            "destination.lat" => "required|string|max:100",
-            "destination.lng" => "required|string|max:100",
+            "origin.lat" => "required|numeric",
+            "origin.lng" => "required|numeric",
+            "destination.lat" => "required|numeric",
+            "destination.lng" => "required|numeric",
             "date" => "required|after:yesterday",
             "time" => "required|date_format:H:i",
             'type' => 'required|in:other,talebat'

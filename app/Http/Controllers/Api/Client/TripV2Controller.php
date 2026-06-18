@@ -184,36 +184,96 @@ class TripV2Controller extends ApiController
         return sendResponse(new NewTripResource($trip));
     }
 
+    // Old store implementation kept here for quick rollback.
+    // To return to it, comment the active store() below and uncomment this function.
+    //
+    // public function store(SearchTripRequest $request)
+    // {
+    //     DB::beginTransaction();
+    //     $trip = Trip::create([
+    //         'client_id' => auth()->id(),
+    //         'date' => Carbon::parse($request->date)->format('Y-m-d'),
+    //         'origin' => $request->origin,
+    //         'destination' => $request->destination,
+    //         'time' => $request->time,
+    //         'parent_id' => 0,
+    //     ]);
+    //
+    //     if (!empty($trip)) {
+    //         $distance = (new DriversActions())->calcDistance(
+    //             $trip->origin['lat'],
+    //             $trip->origin['lng'],
+    //             $trip->destination['lat'],
+    //             $trip->destination['lng'],
+    //         );
+    //
+    //         $distanceKm = data_get($distance, 'distance', 0);
+    //         $duration = data_get($distance, 'duration', 0);
+    //         $distanceKm = $distanceKm < 1 ? 1 : $distanceKm;
+    //         $taxRate = (float) setting('general', 'tax', 14);
+    //         $kmPrice = (float) setting('price', 'other_min', 14);
+    //
+    //         if ($kmPrice <= 0) {
+    //             throw new \Exception("Invalid KM price for user");
+    //         }
+    //
+    //         $distanceKm = max(1, $distanceKm);
+    //         $subtotal = round($distanceKm * $kmPrice, 2);
+    //         $taxValue = round(($subtotal * $taxRate) / 100, 2);
+    //         $total = round($subtotal + $taxValue, 2);
+    //
+    //         $report = Report::create([
+    //             "total_km" => $distanceKm,
+    //             "duration" => $distance["duration"],
+    //             "sub_total" => $subtotal,
+    //             "tax_value" => $taxValue,
+    //             "tax" => $taxRate,
+    //             "total" => $total,
+    //             "payment_method" => 'not paid',
+    //             "km_price" => $kmPrice,
+    //             "reservation_type" => 'other',
+    //             "start_date" => Carbon::parse($request->date)->format('Y-m-d'),
+    //             "end_date" => Carbon::parse($request->date)->format('Y-m-d'),
+    //         ]);
+    //
+    //         $trip->update(['report_id' => $report->id]);
+    //         $this->createTripChat($trip);
+    //     }
+    //
+    //     DB::commit();
+    //
+    //     return sendResponse(NewTripResource::make($trip), __("messages.resource_created"));
+    // }
+
     public function store(SearchTripRequest $request)
     {
-        DB::beginTransaction();
-        $trip = Trip::create([
-            'client_id' => auth()->id(),
-            'date' => Carbon::parse($request->date)->format('Y-m-d'),
-            'origin' => $request->origin,
-            'destination' => $request->destination,
-            'time' => $request->time,
-            'parent_id' => 0,
-        ]);
+        $data = $request->validated();
 
-        if (!empty($trip)) {
+        $trip = DB::transaction(function () use ($data) {
+            $trip = Trip::create([
+                'client_id' => auth()->id(),
+                'date' => Carbon::parse($data['date'])->format('Y-m-d'),
+                'origin' => $data['origin'],
+                'destination' => $data['destination'],
+                'time' => $data['time'],
+                'parent_id' => 0,
+            ]);
+
             $distance = (new DriversActions())->calcDistance(
-                $trip->origin['lat'],
-                $trip->origin['lng'],
-                $trip->destination['lat'],
-                $trip->destination['lng'],
+                (float) $data['origin']['lat'],
+                (float) $data['origin']['lng'],
+                (float) $data['destination']['lat'],
+                (float) $data['destination']['lng'],
             );
             # Generate Report
 
             /* new change remplate the 0 of new report */
               // ✅ normalize distance
                 $distanceKm = data_get($distance, 'distance', 0);
-                $duration   = data_get($distance, 'duration', 0);
+                $duration   = max(1, data_get($distance, 'duration', 0));
 
                 // minimum 1 km
                 $distanceKm = $distanceKm < 1 ? 1 : $distanceKm;
-
-                $user = auth()->user();
 
                 // tax setting
                 $taxRate = (float) setting('general', 'tax', 14);
@@ -221,7 +281,8 @@ class TripV2Controller extends ApiController
                 // choose price column safely
                // $priceType = "other_price";
                // $kmPrice = $user->$priceType ?? 0;
-                $kmPrice = (float) setting('price', 'other_min', 14);  
+                $priceKey = $data['type'] === 'talebat' ? 'talebat_min' : 'other_min';
+                $kmPrice = (float) setting('price', $priceKey, 14);  
 
                 // safety check
                 if ($kmPrice <= 0) {
@@ -238,16 +299,16 @@ class TripV2Controller extends ApiController
 
             $report = Report::create([
                 "total_km" => $distanceKm, //$distance["distance"] < 1 ? 1 : $distance["distance"],
-                "duration" => $distance["duration"],
+                "duration" => $duration,
                 "sub_total" => $subtotal,
                 "tax_value" => $taxValue,
                 "tax" => $taxRate,
                 "total" => $total,
                 "payment_method" => 'not paid',
                 "km_price" => $kmPrice,
-                "reservation_type" => 'other',
-                "start_date" => Carbon::parse($request->date)->format('Y-m-d'),
-                "end_date" => Carbon::parse($request->date)->format('Y-m-d'),
+                "reservation_type" => $data['type'],
+                "start_date" => Carbon::parse($data['date'])->format('Y-m-d'),
+                "end_date" => Carbon::parse($data['date'])->format('Y-m-d'),
             ]);
             # LINK TRIPS TO REPORT
             $trip->update(['report_id' => $report->id]);
@@ -255,9 +316,9 @@ class TripV2Controller extends ApiController
             // dd('a');
             # Create Chat
             $this->createTripChat($trip);
-        }
 
-        DB::commit();
+            return $trip->fresh(['report', 'chat']);
+        });
 
         # NOTIFY CLIENT
        // $this->notifyClients($request, $trip);
