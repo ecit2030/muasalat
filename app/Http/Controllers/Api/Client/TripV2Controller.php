@@ -535,7 +535,7 @@ public function search(Trip $trip)
                 );
 
 
-           // $this->notifyDrivers($driver, $trip);
+            $this->notifyDrivers($driver, $trip);
 
             return sendResponse(__("messages.send to the captain"));
         } catch (\Throwable $e) {
