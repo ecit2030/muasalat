@@ -8,7 +8,9 @@
 /public/hot
 /public/storage
 /public/.htaccess
+/public/fcm.json
 /storage/*.key
+/storage/app/fcm.json
 .env
 .env.backup
 .phpunit.result.cache

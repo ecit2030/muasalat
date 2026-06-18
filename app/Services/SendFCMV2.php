@@ -23,7 +23,7 @@ class SendFCMV2
 
     protected function authenticate(): void
     {
-        $credentialsFilePath = public_path('fcm.json');
+        $credentialsFilePath = storage_path('app/fcm.json');
 
         if (!file_exists($credentialsFilePath)) {
             throw new Exception('Service account credentials file not found');
@@ -32,13 +32,9 @@ class SendFCMV2
         $credentials = json_decode(file_get_contents($credentialsFilePath), true);
         $this->projectId = $credentials['project_id'];
 
-
         $client = new Google_Client();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
-
-        # Ensure the credentials are loaded
-        $client->useApplicationDefaultCredentials();
 
         # Fetch the access token
         try {
