@@ -376,6 +376,7 @@ public function search(Trip $trip)
         $driver->kmPrice = $kmPrice; 
         $driver->taxPercentage = $taxPercentage; 
         $driver->subtotal = $subtotal; 
+        $driver->distanceValue = $distanceValue; 
         /**/
 
         $driver->validSeats = $validSeats;

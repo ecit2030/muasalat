@@ -68,6 +68,7 @@ class CaptainModelResource extends JsonResource
             "kmPrice" => $this->kmPrice ?? 0,
             "taxPercentage" => $this->taxPercentage ?? 0,
             "subtotal" => $this->subtotal ?? 0, 
+            "distanceValue" => $this->distanceValue ?? 0,
 
             "status" => $this->status,
             "active" => $this->active,
