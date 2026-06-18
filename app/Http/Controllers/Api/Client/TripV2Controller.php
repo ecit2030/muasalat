@@ -216,7 +216,7 @@ class TripV2Controller extends ApiController
                 $user = auth()->user();
 
                 // tax setting
-                $taxRate = data_get(setting('tax'), 'tax', 14);
+                $taxRate = (float) setting('general', 'tax', 14);
 
                 // choose price column safely
                // $priceType = "other_price";
@@ -235,7 +235,7 @@ class TripV2Controller extends ApiController
             /* new change remplate the 0 of new report */
 
             $report = Report::create([
-                "total_km" => $distance["distance"] < 1 ? 1 : $distance["distance"],
+                "total_km" => $distanceKm, //$distance["distance"] < 1 ? 1 : $distance["distance"],
                 "duration" => $distance["duration"],
                 "sub_total" => $subtotal,
                 "tax_value" => $taxValue,
