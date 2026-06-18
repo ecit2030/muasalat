@@ -64,6 +64,11 @@ class CaptainModelResource extends JsonResource
             "otherPrice" => $this->driverOrg ? (string)$this->driverOrg->other_price : (string)$this->other_price,
             "shouldUpdatePrice" => false,
 
+
+            "kmPrice" => $this->kmPrice ?? 0,
+            "taxPercentage" => $this->taxPercentage ?? 0,
+            "subtotal" => $this->subtotal ?? 0, 
+
             "status" => $this->status,
             "active" => $this->active,
             "tripTotal" => isset($this?->tripTotal) ? (string)number_format($this?->tripTotal,2) : '0',

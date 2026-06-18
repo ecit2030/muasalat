@@ -371,6 +371,13 @@ public function search(Trip $trip)
         $taxPercentage = (float) setting('general', 'tax', 14);
 
         $driver->tripTotal = $subtotal + (($subtotal * $taxPercentage) / 100);
+
+        /**/ 
+        $driver->kmPrice = $kmPrice; 
+        $driver->taxPercentage = $taxPercentage; 
+        $driver->subtotal = $subtotal; 
+        /**/
+
         $driver->validSeats = $validSeats;
 
         if ($validSeats <= 0) {
