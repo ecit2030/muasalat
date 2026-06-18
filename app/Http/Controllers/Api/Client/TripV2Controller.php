@@ -221,17 +221,19 @@ class TripV2Controller extends ApiController
                 // choose price column safely
                // $priceType = "other_price";
                // $kmPrice = $user->$priceType ?? 0;
-                $kmPrice = data_get(setting('price'), 'other_min', 1);
+                $kmPrice = (float) setting('price', 'other_min', 14);  
 
                 // safety check
                 if ($kmPrice <= 0) {
                     throw new \Exception("Invalid KM price for user");
                 }
 
-                // calculations
-                $subtotal = $distanceKm * $kmPrice;
-                $taxValue = ($subtotal * $taxRate) / 100;
-                $total = $subtotal + $taxValue;
+                // calculations 
+                $distanceKm = max(1, $distanceKm);
+                $subtotal = round($distanceKm * $kmPrice, 2);
+                $taxValue = round(($subtotal * $taxRate) / 100, 2);
+                $total    = round($subtotal + $taxValue, 2);
+
             /* new change remplate the 0 of new report */
 
             $report = Report::create([
